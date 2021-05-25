@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Standard Meta -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <!-- Site Properties -->
+  <title>About us</title>
+  <link rel="shortcut icon" href="../media/logos.ico" />
+  <script type="text/javascript" src="../assets/plugins/jquery-3.3.1.js"></script>
+  <script type="text/javascript" src="../assets/plugins/semantic/semantic.js"></script>
+  <link rel="stylesheet" type="text/css" href="../assets/plugins/semantic/semantic.css">
+  <!-- Standard Meta -->
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <!-- Site Properties -->
+
+  <script src="../assets/plugins/semantic/components/form.js"></script>
+  <script src="../assets/plugins/semantic/components/transition.js"></script>
+  <script type="text/javascript" src="../js/MD5.js"></script>
+  <script type="text/javascript" src="../js/ReadProperties.js"></script>
+  <script type="text/javascript" src="../js/AllUrlsJson.js"></script>
+  <script type="text/javascript" src="../js/LoadMainPage.js"></script>
+  <script type="text/javascript" src="../js/ReadProperties.js"></script>
+  <script type="text/javascript" src="../js/AesFunction.js"></script>
+  <style type="text/css">
+
+
+    .hidden.menu {
+      display: none;
+    }
+    .masthead.segment {
+      min-height: 400px;
+      padding: 1em 0em;
+    }
+    .masthead .logo.item img {
+      margin-right: 1em;
+    }
+    .masthead .ui.menu .ui.button {
+      margin-left: 0.5em;
+    }
+    .masthead h1.ui.header {
+
+      margin-top: 1em;
+      margin-bottom: 0em;
+      font-size: 3em;
+      font-weight: normal;
+    }
+    .masthead h2 {
+      font-size: 1.7em;
+      font-weight: normal;
+    }
+
+    .ui.vertical.stripe {
+      padding: 5em 0em;
+    }
+    .ui.vertical.stripe h3 {
+      font-size: 2em;
+    }
+    .ui.vertical.stripe .button + h3,
+    .ui.vertical.stripe p + h3 {
+      margin-top: 3em;
+    }
+    .ui.vertical.stripe .floated.image {
+      clear: both;
+    }
+    .ui.vertical.stripe p {
+      font-size: 1.33em;
+    }
+    .ui.vertical.stripe .horizontal.divider {
+      margin: 3em 0em;
+    }
+
+    .quote.stripe.segment {
+      padding: 0em;
+    }
+    .quote.stripe.segment .grid .column {
+      padding-top: 5em;
+      padding-bottom: 5em;
+    }
+
+    .footer.segment {
+      padding: 5em 0em;
+    }
+
+    .secondary.pointing.menu .toc.item {
+      display: none;
+    }
+
+    @media only screen and (max-width: 700px) {
+      .ui.fixed.menu {
+        display: none !important;
+      }
+      .secondary.pointing.menu .item,
+      .secondary.pointing.menu .menu {
+        display: none;
+      }
+      .secondary.pointing.menu .toc.item {
+        display: block;
+      }
+
+      .masthead.segment {
+        min-height: 350px;
+      }
+      .masthead h1.ui.header {
+        font-size: 2em;
+        margin-top: 1.5em;
+      }
+      .masthead h2 {
+        margin-top: 0.5em;
+        font-size: 1.5em;
+
+      }
+
+      .segment.a {
+        /*background: rgb(185, 246, 246);*//*设置颜色背景*/
+        background-image: url("../media/MainPage/background.png");/*设置背景图片*/
+        background-repeat:no-repeat;/*图片适应窗口大小，这里设置的是不进行平铺*/
+        background-attachment: fixed;/*图片相对于浏览器固定,这里设置背景图片固定，不随内容滚动*/
+        background-origin: border-box;/*从边框区域显示*/
+        background-size:cover;/*指定图片大小，此时会保持图像的纵横比并将图像缩放成将完全覆盖背景定位区域的最小大小*/
+      }
+    }
+
+
+  </style>
+
+
+  <script>
+  $(document)
+    .ready(function() {
+     var  userinfo = jQuery.parseJSON(sessionStorage.getItem('userInfo'));
+
+        document.getElementById('un').textContent = userinfo.userName;
+
+      if(JSON.parse(sessionStorage.getItem('IconPath')).hasIcon == '1')
+      {
+        $('#head').attr('src', urlJson.url_major + urlJson.PictureDownload + "?email=" + jQuery.parseJSON(sessionStorage.getItem('userInfo')).email);
+        $('#head').attr('src', urlJson.url_major + urlJson.PictureDownload + "?email=" + jQuery.parseJSON(sessionStorage.getItem('userInfo')).email);
+      }
+
+      else{
+        var gs="default_male.png";
+        if(userinfo.sex!="Male"){
+          gs="default_female.png"
+        }
+        $('#head').attr('src', '../media/UserIcon/Default/'+gs);
+        $('#head').attr('src', '../media/UserIcon/Default/'+gs);
+      }
+
+      // fix menu when passed
+      $('.masthead')
+        .visibility({
+          once: true,
+          onBottomPassed: function() {
+            $('.fixed.menu').transition('fade in');
+          },
+          onBottomPassedReverse: function() {
+            $('.fixed.menu').transition('fade out');
+          }
+        })
+      ;
+
+      // create sidebar and attach to menu open
+      $('.ui.sidebar')
+        .sidebar('attach events', '.toc.item')
+      ;
+
+      $('.masthead')
+              .visibility({
+                once       : false,
+                continuous : true,
+
+                onPassing  : function(calculations) {
+                  var oldColor = 'rgba(0, 0, 0, 1)';
+
+                  if(calculations.percentagePassed<=0.2){
+                    $(this)
+                            .css('background-color', oldColor)
+                    ;
+                  }
+                  else{
+                    var per = calculations.percentagePassed;
+                    var r = 255*(per-0.2)*3;
+                    var g = 255*(per-0.2)*3;
+                    var b = 255*(per-0.2)*3;
+
+                    var newColor = 'rgba('+r+','+ g+','+ b+', 1)';
+                    $(this)
+                            .css('background-color', newColor)
+                    ;
+                  }
+                }
+              })
+      ;
+
+
+      $('.ui.sub.header')
+              .popup({
+              })
+      ;
+
+    })
+  ;
+  </script>
+</head>
+<body>
+
+
+
+
+
+
+
+<!-- Sidebar Menu -->
+
+
+
+<!-- Page Contents -->
+<div class="pusher">
+  <div class="ui vertical masthead center aligned segment">
+
+
+
+    <div class="ui large secondary inverted pointing menu" style="background-color: #000000">
+      <div class="left item">
+        <img src="../media/logos.ico">
+        <h>&ensp;&ensp;</h>
+
+        <a class="item" onclick="window.location.href='MainPage.html'">
+          <i class="globe icon"></i>
+          Main Page</a>
+
+        <a class="item" onclick="window.location.href='ShopCart.html'">
+          <i class="cart icon"></i>
+          Shopping Cart</a>
+
+        <a class="item" onclick="window.location.href='OrderList.html'">
+          <i class="file alternate icon"></i>
+          Order List</a>
+
+        <a class="item" onclick="window.location.href='Administrator.html'">
+          <i class="user secret icon"></i>
+          Adminstrator</a>
+
+      </div>
+      <div class="right item">
+        <img class="ui avatar image" id="head" src="">
+        <h>&ensp;&ensp;</h>
+        <a class="item" id="un"> </a>
+        <h>&ensp;&ensp;</h>
+        <a class="ui inverted button" onclick="window.location.href='Login.html'">Log Out</a>
+      </div>
+
+
+
+    </div>
+
+
+
+
+
+    <div class="ui text container">
+      <h1 class="ui inverted header">
+        A Shopping Platform
+      </h1>
+      <h2 class="ui inverted header">All best E-Products Here for you.</h2>
+      <div class="ui huge primary button" onclick="window.location.href='MainPage.html'">Go shopping <i class="right arrow icon"></i></div>
+    </div>
+
+
+</div>
+
+
+
+  <div class="ui vertical stripe segment">
+    <div class="ui middle aligned stackable grid container">
+      <div class="row">
+        <div class="eight wide column">
+          <h3 class="ui header">G4, A platform focusing on best global electronic products</h3>
+          <p>
+          <p style="text-align:justify;">
+            <span class="transSent" style="font-size:16px;color:#333333;font-family:Arial, &quot;background-color:#F7F8FA;">We collects all kinds of popular electronic products and conducts comprehensive evaluation to ensure the uniqueness of the products, which is very attractive to young people.</span>
+          <span class="transSent" style="font-size:16px;color:#333333;font-family:Arial, &quot;background-color:#F7F8FA;">In November 2020, the number of users of G4 platform has exceeded 10.</span>
+            <span class="transSent" style="font-size:16px;color:#333333;font-family:Arial, &quot;background-color:#F7F8FA;">Commodities on G4 platform have three characteristics:</span>
+          </p>
+          <p>
+            <br />
+          </p>
+          <p class="_tgt transPara grammarSection" style="font-size:16px;color:#333333;font-family:Arial, &quot;background-color:#F7F8FA;">
+            <span class="transSent"></span>
+          </p>
+          <p class="_tgt transPara grammarSection" style="font-size:16px;color:#333333;font-family:Arial, &quot;background-color:#F7F8FA;">
+            <span class="transSent">First, there are always novel products coming out.</span>
+          </p>
+          <p class="_tgt transPara grammarSection" style="font-size:16px;color:#333333;font-family:Arial, &quot;background-color:#F7F8FA;">
+            <span class="transSent"></span>
+          </p>
+          <p class="_tgt transPara grammarSection" style="font-size:16px;color:#333333;font-family:Arial, &quot;background-color:#F7F8FA;">
+            <span class="transSent">Second, there is no fixed well-known brand. It is all niche and personalized.</span>
+          </p>
+          <p class="_tgt transPara grammarSection" style="font-size:16px;color:#333333;font-family:Arial, &quot;background-color:#F7F8FA;">
+            <span class="transSent"></span>
+          </p>
+          <p class="_tgt transPara grammarSection" style="font-size:16px;color:#333333;font-family:Arial, &quot;background-color:#F7F8FA;">
+            <span class="transSent">Third, other platforms have no major category</span>
+          </p>
+          </p>
+          <p>
+            <br />
+          </p>
+
+        </div>
+        <div class="six wide right floated column">
+          <img src="../media/platform.jpg" class="ui large bordered rounded image">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+  <div class="ui vertical stripe segment a">
+
+    <div class="ui text container">
+      <h3 class="ui header">Our Group 4 Members</h3>
+      <div class="ui horizontal list">
+        <p>
+          <br />
+        </p>
+
+
+        <div class="item">
+          <img class="ui mini circular image" src="../media/UserIcon/Default/default_male.png">
+          <div class="content">
+            <div class="ui sub header" data-content="I'm Tian Yu, leader of group 4, I'm responsible for front page develop">Tian Yu</div>
+            Leader
+          </div>
+          <br />
+          <br />
+          <p style="text-align:justify;">
+            <span style="font-family:&quot;font-size:16px;background-color:#FFFFFF;">&emsp;I have the confidence because I have such ability! I am kind-hearted, patient, outgoing and creative. I am a hard working student especially do the thing I am interested in. I will try my best to resolve any problem no matter how difficult it is. I always believe that one will easily lag behind unless he keeps on learning.</span>
+          </p>
+          <p>
+            <br />
+          </p>
+
+        </div>
+        <p>
+          <br />
+        </p>
+
+
+        <div class="item">
+          <p>
+            <br />
+          </p>
+          <img class="ui mini circular image" src="../media/UserIcon/Default/default_female.png">
+          <div class="content">
+            <div class="ui sub header" data-content="222This popup is very long but wont escape the segment it is placed in">Zhang Yunqi</div>
+            Developer
+          </div>
+          <br />
+          <br />
+          <p style="text-align:justify;">
+            <span style="font-family:&quot;font-size:16px;background-color:#FFFFFF;">&emsp;I’m very happy and I like to make friends with others. I also like singing but traveling is my favorite, I have been to many interesting places in China but I haven’t been to other countries. What a pity!</span>
+          </p>
+          <p>
+            <br />
+          </p>
+
+
+
+        </div>
+        <p>
+          <br />
+        </p>
+        <div class="item">
+          <p>
+            <br />
+          </p>
+          <img class="ui mini circular image" src="../media/UserIcon/Default/default_male.png">
+          <div class="content">
+            <div class="ui sub header">Xia Runze</div>
+            Developer
+          </div>
+          <br />
+          <br />
+          <p style="text-align:justify;">
+            <span style="font-family:&quot;font-size:18px;background-color:#FFFFFF;">&emsp;I am a system engineer for ibm. my job is to develop new computer software and i enjoy the job very much， because software development is very creative and imaginative work. so if anyone here is interested in computer and computer software， please let me know. we can spend hours talking about computers.</span>
+          </p>
+          <p>
+            <br />
+          </p>
+
+        </div>
+        <p>
+          <br />
+        </p>
+        <div class="item">
+          <p>
+            <br />
+          </p>
+          <img  class="ui mini circular image" src="../media/UserIcon/Default/default_male.png">
+          <div class="content">
+            <div class="ui sub header">Zhao Chongyang</div>
+            Developer
+          </div>
+          <br />
+          <br />
+          <p style="text-align:justify;">
+            <span style="font-family:&quot;font-size:18px;background-color:#FFFFFF;">&emsp;In my spare time, I like to read novels. I think reading could enlargemy knowledge. As for novels, I could imagine whatever I like such as a well-known scientist or a kung-fu master. In addition to reading, I also like to play PC games. A lot of grownups think playing PC games hinders the students from learning.&nbsp;</span>
+          </p>
+          <p>
+            <br />
+          </p>
+
+        </div>
+        <p>
+          <br />
+        </p>
+        <div class="item">
+          <p>
+            <br />
+          </p>
+          <img src="../media/UserIcon/Default/default_male.png" class="ui mini circular image">
+          <div class="content">
+            <div class="ui sub header">Xie Zihao</div>
+            Developer
+          </div>
+          <br />
+          <br />
+          <p>
+          <p class="reader-word-layer reader-word-s1-0" style="text-align:justify; &quot;font-size:167px;background-color:#FFFFFF;">
+          <span style="font-family:&quot;font-size:18px;background-color:#FFFFFF;">&emsp;In August 2004,I left QingDao to BeiJing and worked for a foreign enterprise as a automation software test engineer.Because I want to change my working environment, I'd like to find a job which is more challenging. Morover Motorola is a global company, so I feel I can gain the most from working in this kind of company ennvironment. That is the reason why I come here to compete for this position.</span>
+          </p>
+          <p class="reader-word-layer reader-word-s1-2" style="font-size:167px; &quot;background-color:#FFFFFF;">
+
+          </p>
+          </p>
+
+        </div>
+      </div>
+      </h4>
+
+    </div>
+  </div>
+
+
+
+  <div class="ui vertical footer segment">
+    <div class="ui center aligned container">
+      <div class="ui horizontal small divided link list">
+        <a class="item"><img src="../media/logos.ico" class="ui centered mini image"></a>
+        <a class="item" href="#" onclick="window.location.href='homepage.html'">
+          <strong style="color: black">About Us</strong>
+        </a>
+        <a class="item" href="#">
+          <strong style="color: black" onclick="window.location.href='UseragreementsUnique.html'">Privacy Policy</strong>
+        </a>
+      </div>
+      <div>
+        &nbsp©&nbsp Copyright 2020 DS Group 4
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+</body>
+
+</html>

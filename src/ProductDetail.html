@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Products Page</title>
+    <link rel="shortcut icon" href="../media/logos.ico"/>
+    <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+    <meta HTTP-EQUIV="Cache-Control" CONTENT="no-store, must-revalidate">
+    <meta HTTP-EQUIV="expires" CONTENT="Wed, 26 Feb 1997 08:21:57 GMT">
+    <meta HTTP-EQUIV="expires" CONTENT="0">
+    <link rel="stylesheet" href="../assets/plugins/layui-v2.5.6/layui/layui.css" media="all">
+    <script src="../assets/plugins/layui-v2.5.6/layui/layui.js"></script>
+    <script type="text/javascript" src="../assets/plugins/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../assets/plugins/semantic/semantic.js"></script>
+    <link rel="stylesheet" type="text/css" href="../assets/plugins/semantic/semantic.css">
+    <script type="text/javascript" src="../js/JumpBrandPage.js"></script>
+    <script type="text/javascript" src="../js/AllUrlsJson.js"></script>
+    <script type="text/javascript" src="../js/LoadMainPage.js"></script>
+
+    <style type="text/css">
+
+        .ui.search {
+            margin-left: auto;
+        }
+
+        .a.ui.header {
+            margin-top: 39px;
+        }
+
+        .ui.footer.segment {
+            margin: 5em 0em 0em;
+            padding: 5em 0em;
+        }
+
+
+        body {
+            background-image: url("../media/MainPage/background.png");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-origin: border-box;
+            background-size: cover;
+        }
+
+        .tab.segment.a {
+            height: 205em;
+        }
+
+    </style>
+    <script type="text/javascript">
+
+        var storage;
+        var name;
+        var number;
+        var uadd;
+        var colorinfo;
+        var username;
+        var catid;
+        var brandid;
+        var productsn = "";
+        var productprice;
+        var color_choosed = "";
+        var uphone;
+        var uemail;
+        var odamount;
+        var productinfo;
+        var str = '';
+        var ap = '';
+        var sta = '';
+        var cou = '';
+        var colordic = {1: "Black", 2: "White", 3: "Silver", 4: "Gold", 5: "Blue", 6: "Red"};
+
+        $(document)
+            .ready(function () {
+
+
+                document.getElementById("64g").style.display = "none";
+                document.getElementById("128g").style.display = "none";
+                document.getElementById("256g").style.display = "none";
+                document.getElementById("512g").style.display = "none";
+                document.getElementById("storagehead").style.display = "none";
+
+
+                document.getElementById("1").style.display = "none";
+                document.getElementById("2").style.display = "none";
+                document.getElementById("3").style.display = "none";
+                document.getElementById("4").style.display = "none";
+                document.getElementById("5").style.display = "none";
+                document.getElementById("6").style.display = "none";
+
+
+                //console.log(sessionStorage.getItem('userInfo'));
+
+                productinfo = jQuery.parseJSON(sessionStorage.getItem('target_products'));
+                let userinfo = jQuery.parseJSON(sessionStorage.getItem('userInfo'));
+                var longimg = '../media/DetailPage/' + productinfo.goods_sn + '.png';
+
+
+                document.getElementById("dets").style.backgroundImage = "url(" + longimg + ")";
+
+                document.getElementById("phone_head").src = "../media/BrandImages/" + productinfo.goods_sn + ".png";
+                document.getElementById("leftimg").src = "../media/BrandImages/" + productinfo.goods_sn + ".png";
+
+                document.getElementById("r1").src = "../media/BrandImages/" + productinfo.goods_sn + ".png";
+                document.getElementById("r2").src = "../media/BrandImages/" + productinfo.goods_sn + ".png";
+                document.getElementById("r3").src = "../media/BrandImages/" + productinfo.goods_sn + ".png";
+                document.getElementById("r4").src = "../media/BrandImages/" + productinfo.goods_sn + ".png";
+                number = productinfo.goods_sn;
+                catid = productinfo.category_id;
+                brandid = productinfo.brand_id;
+
+
+                document.getElementById("cpu").textContent = productinfo.description.description2;
+                document.getElementById("memory").textContent = productinfo.description.description1;
+
+                let usersInformation = JSON.parse(sessionStorage.getItem('userInfo'));
+                if(JSON.parse(sessionStorage.getItem('IconPath')).hasIcon == '1')
+                    $('#user_header_menu_icon').attr('src', urlJson.url_major + urlJson.PictureDownload + "?email=" + usersInformation.email);
+                else if(JSON.parse(sessionStorage.getItem('IconPath')).hasIcon == '0')
+                    $('#user_header_menu_icon').attr('src', usersInformation.userIconPath);
+
+                document.getElementById("user_menu_name").textContent = userinfo.userName;
+                document.getElementById("recname").textContent = userinfo.userName;
+                document.getElementById("phone").textContent = userinfo.phone;
+                document.getElementById("recadd").textContent = userinfo.address;
+                uadd = userinfo.address;
+                uemail = userinfo.email;
+                uphone = userinfo.phone;
+
+
+                productsn = productinfo.goods_sn;
+                productprice = productinfo.price;
+                storage = parseInt(productinfo.goods_count);
+
+
+                document.getElementById("price").innerHTML = productinfo.price + "£";
+
+                document.getElementById("storagenumber").innerHTML = productinfo.goods_count;
+
+                document.getElementById("someinfo").innerHTML = productinfo.description.description2;
+
+
+                // document.getElementById("dets").style.backgroundImage="url(../media/DetailPage/020401.png)";
+                document.getElementById("dets").style.backgroundRepeat = "no-repeat";//设置背景不平铺
+                document.getElementById("dets").style.backgroundPosition = "center";//设置背景图的位置
+                document.getElementById("dets").style.backgroundSize = "cover";
+
+
+                colorinfo = productinfo.color_id;
+                var m = colorinfo.split(",");
+
+
+                for (j = 0; j < m.length; j++) {
+                    document.getElementById(m[j]).style.display = "block";
+                }
+
+
+                var stor = productinfo.goods_sn.slice(1, 2);
+                if (stor == "2" || stor == "3") {
+                    document.getElementById("64g").style.display = "block";
+                    document.getElementById("128g").style.display = "block";
+                    document.getElementById("256g").style.display = "block";
+                    document.getElementById("512g").style.display = "block";
+                    document.getElementById("storagehead").style.display = "block";
+                }
+
+
+                $('.special.card .image').dimmer({
+                    on: 'hover'
+                });
+                $('.star.rating')
+                    .rating()
+                ;
+
+                $('.card .dimmer')
+                    .dimmer({
+                        on: 'hover'
+                    })
+                ;
+                $('.overlay.overlay')
+                    .visibility({
+                        type: 'fixed',
+                        offset: 15 // give some space from top of screen
+                    })
+                ;
+                $('.menu .item')
+                    .tab()
+                ;
+                $('.ui.header')
+                    .visibility({
+                        once: false,
+                        onBottomPassed: function () {
+                            $('.fixed.menu').transition('fade in');
+                        },
+                        onBottomPassedReverse: function () {
+                            $('.fixed.menu').transition('fade out');
+                        }
+                    })
+                ;
+
+
+                $('.selection.dropdown')
+                    .dropdown({
+                        clearable: true
+                    })
+                ;
+//----------------------------------------------------------------------------------------------------------------------
+                $('.radio.one.checkbox')
+                    .checkbox({
+                        onChecked: function () {
+                            color_choosed = "1";
+                        }
+                    });
+                $('.radio.two.checkbox')
+                    .checkbox({
+                        onChecked: function () {
+                            color_choosed = "2";
+                        }
+                    });
+                $('.radio.three.checkbox')
+                    .checkbox({
+                        onChecked: function () {
+                            color_choosed = "3";
+                        }
+                    });
+                $('.radio.four.checkbox')
+                    .checkbox({
+                        onChecked: function () {
+                            color_choosed = "4";
+                        }
+                    });
+                $('.radio.five.checkbox')
+                    .checkbox({
+                        onChecked: function () {
+                            color_choosed = "5";
+                        }
+                    });
+                $('.radio.six.checkbox')
+                    .checkbox({
+                        onChecked: function () {
+                            color_choosed = "6";
+                        }
+                    });
+//======================================================================================================================
+
+                $('.ui.sticky')
+                    .sticky({
+                        context: '#example3'
+                    })
+                ;
+
+
+                $('.main.menu.item')
+                    .tab()
+                ;
+
+                var pn = jQuery.parseJSON(sessionStorage.getItem('target_products'));
+                var phonename = pn.goods_name
+                document.getElementById('phone_name').textContent = phonename;
+                document.getElementById('phonen').innerHTML = phonename;
+                document.getElementById('specificp').textContent = phonename;
+
+
+                var cat;
+                if (pn.category_id == "1") {
+                    cat = "Laptop";
+                }
+                if (pn.category_id == "2") {
+                    cat = "Mobile Phone";
+                }
+                if (pn.category_id == "3") {
+                    cat = "Tablet";
+                }
+                if (pn.category_id == "4") {
+                    cat = "Earphone";
+                }
+                if (pn.category_id == "5") {
+                    cat = "Other Products";
+                }
+                document.getElementById('rightinfo').textContent = "Category: " + cat;
+            });
+
+        function Setadd() {
+            window.location.href = 'ModifyUserInfo.html';
+        }
+
+        function Setphone() {
+            window.location.href = 'ModifyUserInfo.html';
+        }
+
+        function buy() {
+
+            if (uadd == "") {
+                $('.ui.addadd.modal')
+                    .modal('show')
+                    .modal('setting', 'closable', false)
+                ;
+            } else {
+
+                if (uphone == "") {
+                    $('.ui.addphone.modal')
+                        .modal('show')
+                        .modal('setting', 'closable', false)
+                    ;
+                }
+
+                odamount = document.getElementById('productcount').value;
+                console.log(document.getElementById('productcount').value);
+
+                var ct = document.getElementById('productcount').value;
+                if (ct <= storage) {
+                    if (color_choosed != "") {
+
+                        var productconfirm = productinfo.goods_name + "， " + productinfo.description.description2 + "， " + productinfo.description.description1 + " Amount: " + odamount + " Color: " + colordic[color_choosed];
+                        document.getElementById("recproduct").textContent = productconfirm;
+
+                        $('.ui.buy.normal.modal')
+                            .modal('show')
+                            .modal('setting', 'closable', false)
+                        ;
+                    } else {
+
+                        $('.ui.choose.color.modal')
+                            .modal('show')
+                            .modal('setting', 'closable', false)
+                        ;
+
+                    }
+
+                } else {
+                    $('ui.not.enough.basic.modal')
+                        .modal('show')
+                        .modal('setting', 'closable', false)
+                    ;
+                }
+            }
+
+        }
+
+        function confirmbuy() {
+
+
+            var od = String(odamount);
+
+            let jsonObjects = {
+                "category_id": catid,
+                "brand_id": brandid,
+                "goods_sn": number,
+                "price": Number(odamount * productprice),
+                "color_id": color_choosed,
+                "email": uemail,
+                "order_amount": od,
+            };
+
+
+            jsonObjectk = JSON.stringify(jsonObjects);
+
+            var url_major1 = urlJson.url_major + urlJson.Purchase;
+            var url_major2 = urlJson.url_addition + urlJson.Purchase;
+
+
+            let query = $.ajax({
+                url: url_major1,
+                type: 'POST',
+                data: jsonObjectk,
+                timeout: 2000,
+                dateType: "json",
+                async: false,
+                success: function (res, status, xhr) {
+                    let response = JSON.parse(res);
+                    if (xhr.status == 200) {
+                        if (response.status == "00") {
+                            //console.log("great!!!!!!!!!!!!");
+                            $('.ui.buy.sus.modal')
+                                .modal('show')
+                                .modal('setting', 'closable', false)
+                            ;
+                        }
+                        if(response.status == "08")
+                        {
+                            //console.log("great!!!!!!!!!!!!");
+                            $('.ui.nomoney.modal')
+                                .modal('show')
+                                .modal('setting', 'closable', false)
+                            ;
+                        }
+                    }
+                },
+                fail: function (res) {
+                    console.log(res)
+                },
+                error: function (res) {
+                    let queryAddition = $.ajax({
+                        url: url_major2,
+                        type: 'POST',
+                        data: jsonObjectk,
+                        dateType: "json",
+                        async: false,
+                        success: function (res, status, xhr) {
+                            let response = JSON.parse(res);
+                            //console.log("Hello World!")
+                            if (xhr.status == 200) {
+                                if (response.status == "00") {
+                                    //console.log("great!!!!!!!!!!!!");
+                                    $('.ui.buy.sus.modal')
+                                        .modal('show')
+                                        .modal('setting', 'closable', false)
+                                    ;
+                                }
+                                if(response.status == "08")
+                                {
+                                    //console.log("great!!!!!!!!!!!!");
+                                    $('.ui.nomoney.modal')
+                                        .modal('show')
+                                        .modal('setting', 'closable', false)
+                                    ;
+                                }
+                            }
+                        },
+                        fail: function (res) {
+                            console.log(res);
+                        },
+                        error: function (res) {
+                            console.log(res);
+                        }
+                    });
+                },
+                complete: function (XMLHttpRequest, status) {
+                    console.log(status);
+                    if (status == 'timeout') {
+                        query.abort();
+                        alert("Time out!");
+                    }
+                }
+            });
+
+
+        }
+
+        function addcheck() {
+            var ct = document.getElementById('productcount').value;
+
+
+            if (color_choosed != "") {
+
+                if (ct <= storage) {
+                    ct1 = parseInt(ct);
+                    Cartadd(ct1);
+                } else {
+                    $('.ui.not.enough.modal')
+                        .modal('show')
+                        .modal('setting', 'closable', false)
+                    ;
+                }
+            } else {
+
+                $('.ui.choose.color.modal')
+                    .modal('show')
+                    .modal('setting', 'closable', false)
+                ;
+
+            }
+
+
+        }
+
+        function Cartadd(count) {
+
+            let jsonObjects = {
+                "email": uemail,
+                "goods_sn": productsn,
+                "goods_amount": count,
+                "price": productprice,
+                "color_id": color_choosed
+            };
+
+            console.log(jsonObjects);
+
+            jsonObjectk = JSON.stringify(jsonObjects);
+
+            var url_major1 = urlJson.url_major + urlJson.CartModify;
+            var url_major2 = urlJson.url_addition + urlJson.CartModify;
+
+
+            let query = $.ajax({
+                url: url_major1,
+                type: 'POST',
+                data: jsonObjectk,
+                timeout: 2000,
+                dateType: "json",
+                async: false,
+                success: function (res, status, xhr) {
+                    if (xhr.status == 200) {
+                        $('.ui.add.cart.modal')
+                            .modal('show')
+                            .modal('setting', 'closable', false)
+                        ;
+                    }
+                },
+                fail: function (res) {
+                    console.log(res)
+                },
+                error: function (res) {
+                    let queryAddition = $.ajax({
+                        url: url_major2,
+                        type: 'POST',
+                        data: jsonObjectk,
+                        dateType: "json",
+                        async: false,
+                        success: function (res, status, xhr) {
+                            let response = JSON.parse(res);
+                            //console.log("Hello World!")
+                            if (xhr.status == 200) {
+                                if (response.status == "00") {
+                                    //console.log("great!!!!!!!!!!!!");
+                                    $('.ui.add.cart.modal')
+                                        .modal('show')
+                                        .modal('setting', 'closable', false)
+                                    ;
+                                }
+                            }
+                        },
+                        fail: function (res) {
+                            console.log(res);
+                        },
+                        error: function (res) {
+                            console.log(res);
+                        }
+                    });
+                },
+                complete: function (XMLHttpRequest, status) {
+                    console.log(status);
+                    if (status == 'timeout') {
+                        query.abort();
+                        alert("Time out!");
+                    }
+                }
+            });
+        }
+
+        function subadd() {
+            if (document.getElementById('streetaddress').value == '') {
+                alert("empty street address");
+            }
+            if (document.getElementById('aptnumber').value == '') {
+                alert("empty apt number");
+            }
+            if (document.getElementById('country').value == '') {
+                alert("empty country");
+            }
+            if ($("#state").val() == '') {
+                alert("empty state");
+            }
+            if (document.getElementById('streetaddress').value != '' && document.getElementById('aptnumber').value != '' && document.getElementById('country').value != '' && $("#state").val() != '') {
+                str = document.getElementById('streetaddress').value;
+                ap = document.getElementById('aptnumber').value;
+                sta = $("#state").val();
+                cou = document.getElementById('country').value;
+                var new_add = str + ', ' + ap + ', ' + sta + ', ' + cou;
+
+                document.getElementById('ad').textContent = new_add;
+                $('.ui.basic.test.modal')
+                    .modal('show')
+                ;
+            }
+        }
+
+    </script>
+
+</head>
+<body>
+
+<div class="ui grid">
+    <div class="a hd sixteen wide column">
+        <!-- Following Menu -->
+
+        <div class="ui top inverted menu">
+            <div class="ui item">
+                <img src="../media/logos.ico">
+            </div>
+            <a class="item" href="MainPage.html">
+                <i class="globe icon"></i>
+                Main Page
+            </a>
+            <a class="item" href="ShopCart.html">
+                <i class="cart icon"></i>
+                Shopping Cart
+            </a>
+            <a class="item" href="OrderList.html">
+                <i class="file alternate icon"></i>
+                Order List
+            </a>
+            <a class="item" href="Administrator.html">
+                <i class="user secret icon"></i>
+                Administrator
+            </a>
+            <div class="right menu">
+                <div class="item">
+                    <img class="ui avatar image" id="user_header_menu_icon" src="">
+                    <a class="text" id="user_menu_name" href="ModifyUserInfo.html"></a>
+                </div>
+                <a class="item" href="Login.html">
+                    <i class="logout icon"></i>
+                    Logout
+                </a>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!--End of header-------------------------------------------------------------------------------------------------->
+    <div class="ui container">
+        <div class="ui grid">
+            <div class="seven wide column">
+                <br/>
+                <div class="ui breadcrumb">
+                    <a class="section" href="#" onclick="window.location.href='MainPage.html'">Home</a>
+
+                    <i class="right chevron icon divider cc_cursor"></i>
+                    <div class="active section" id="specificp"></div>
+                </div>
+                <br/>
+                <br/>
+                <img class="ui large image" id="phone_head">
+                <br/>
+
+                <div class="ui tiny images">
+                    <button class="ui icon button">
+                        <i class="chevron left icon"></i>
+                    </button>
+                    <img class="ui  rounded image" id="r1">
+                    <img class="ui  rounded image" id="r2">
+                    <img class="ui  rounded image" id="r3">
+                    <img class="ui  rounded image cc_cursor" id="r4">
+                    <button class="ui icon button">
+                        <i class="chevron right icon"></i>
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="nine wide column">
+                <br/>
+                <br/>
+                <br/>
+                <h style="margin-top: 1.5em;font-size: 2em" id="phonen">Phone name</h>
+                <br/>
+                <h style="color:#ac0013;" id="someinfo">some info</h>
+
+                <div class="ui olive message">
+                    <h style="margin-top: 1.5em;font-size: 1em">Price:&ensp;&ensp;</h>
+                    <h style="font-size: 2em" id="price"></h>
+                    <p></p>
+                    <h>Available:&ensp;&ensp;</h>
+                    <h id="storagenumber"></h>
+                    <p></p>
+                </div>
+
+                <div class="ui form">
+                    <div class="inline fields">
+                        <label>Color: </label>
+                        <div class="field" id="6">
+                            <div class="ui radio six checkbox">
+                                <input type="radio" name="col">
+                                <label>Red</label>
+                            </div>
+                        </div>
+                        <div class="field" id="2">
+                            <div class="ui radio two checkbox">
+                                <input type="radio" name="col">
+                                <label>White</label>
+                            </div>
+                        </div>
+                        <div class="field" id="5">
+                            <div class="ui radio five checkbox">
+                                <input type="radio" name="col">
+                                <label>Blue</label>
+                            </div>
+                        </div>
+                        <div class="field" id="1">
+                            <div class="ui radio one checkbox">
+                                <input type="radio" name="col">
+                                <label>Black</label>
+                            </div>
+                        </div>
+                        <div class="field" id="4">
+                            <div class="ui radio four checkbox">
+                                <input type="radio" name="col">
+                                <label>Gold</label>
+                            </div>
+                        </div>
+                        <div class="field" id="3">
+                            <div class="ui radio three checkbox">
+                                <input type="radio" name="col">
+                                <label>Silver</label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div>
+                    <div class="ui divider"></div>
+                    <div class="ui form 2">
+                        <div class="inline fields">
+                            <label id="storagehead">Storage:&ensp;</label>
+                            <div class="field" id="64g">
+                                <div class="ui radio checkbox">
+                                    <input type="radio" name="sto" checked="checked">
+                                    <label>64G</label>
+                                </div>
+                            </div>
+                            <div class="field" id="128g">
+                                <div class="ui radio checkbox">
+                                    <input type="radio" name="sto">
+                                    <label>128G</label>
+                                </div>
+                            </div>
+                            <div class="field" id="256g">
+                                <div class="ui radio checkbox">
+                                    <input type="radio" name="sto">
+                                    <label>256G</label>
+                                </div>
+                            </div>
+                            <div class="field" id="512g">
+                                <div class="ui radio checkbox">
+                                    <input type="radio" name="sto">
+                                    <label>512G</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <p></p>
+
+
+                <p></p>
+                <div class="ui left action input">
+                    <button class="ui teal labeled icon button" onclick="buy()">
+                        <i class="credit card icon"></i>
+                        Checkout
+                    </button>
+                    <input type="text" value="1" id="productcount">
+
+
+                </div>
+                <p></p>
+                <button class="ui blue button" onclick="addcheck()">
+                    <i class="cart plus icon"></i>
+                    Add to cart
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+        <div class="sixteen wide column">
+
+            <br/>
+            <br/>
+            <br/>
+            <div class="ui segment" id="example3">
+                <div class="left ui rail" style="">
+                    <div class="ui sticky"
+                         style="width: 272px !important; height: 1825.58px !important; left: 338.6px; top: -19.2002px;">
+                        <h3 class="ui header">You are viewing</h3>
+                        <div class="ui divided items">
+                            <div class="item">
+                                <div class="ui tiny image">
+                                    <img class="ui  rounded image" id="leftimg">
+                                </div>
+                                <div class="middle aligned content">
+                                    <a class="header" id="phone_name"></a>
+                                    <div class="meta">
+                                        <p id="memory">12+512GB</p>
+                                        <p id="cpu">Kirin 9000</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right ui rail" style="">
+                    <div class="ui sticky"
+                         style="left: 1420.6px; width: 272px !important; height: 261.925px !important;">
+                        <h3 class="a ui header" id="rightinfo">Short Stuck Content</h3>
+                        <img>
+                    </div>
+                </div>
+                <div id="context2">
+                    <div class=" ui secondary main menu">
+                        <a class="item active" data-tab="details">
+                            Details
+                        </a>
+                        <a class="item" data-tab="comments">
+                            Comments
+                        </a>
+                    </div>
+
+                    <div class="ui active tab segment a" data-tab="details" id="dets">
+
+                    </div>
+                    <div class="ui tab segment" data-tab="comments">
+                        <div class="ui comments">
+
+                            <div class="comment">
+                                <a class="avatar">
+                                    <img src="../media/UserIcon/Default/default_male.png">
+                                </a>
+                                <div class="content">
+                                    <a class="author">Matt</a>
+                                    <div class="metadata">
+                                        <span class="date">Today at 5:42PM</span>
+                                    </div>
+                                    <span style="font-family:Arial;"></span>
+                                    <p>
+                                        • I absolutely love the design of this phone. All premium feel that can finally
+                                        stand up by itself. The curve glass in previous models were impressive but now,
+                                        with a flat/rounded design, this allows the screen’s borders to be reduced
+                                        (creating another leap into a future Bezel-less screen).&nbsp;
+                                    </p>
+                                    <p>
+                                        <br/>
+                                    </p>
+                                    <p>
+                                        • It’s also built very solid. Because of the square design, the grip on this is
+                                        fantastic. This is the first time since the iPhone 4 I can feel a little more at
+                                        an ease of not getting a case for it (But still do!..More on this later).&nbsp;
+                                    </p>
+                                    <p>
+                                        <br/>
+                                    </p>
+                                    <p>
+                                        • The matte back texture leaves no fingerprints whatsoever.
+                                    </p>
+                                    <p>
+                                        <br/>
+                                    </p>
+                                    <p>
+                                        • The biggest selling point for me is the cameras. There are hundreds of reviews
+                                        on the camera quality and honestly, a picture is worth a thousand words. Let me
+                                        just say that these cameras excellent (Some info below).
+                                    </p>
+                                    <div class="actions">
+                                        <a class="reply">Reply</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="comment">
+                                <a class="avatar">
+                                    <img src="../media/UserIcon/Default/default_male.png">
+                                </a>
+                                <div class="content">
+                                    <a class="author">Elliot Fu</a>
+                                    <div class="metadata">
+                                        <span class="date">Yesterday at 12:30AM</span>
+                                    </div>
+                                    <div class="text">
+                                        <p>This has been very useful for my research. Thanks as well!</p>
+                                    </div>
+                                    <div class="actions">
+                                        <a class="reply">Reply</a>
+                                    </div>
+                                </div>
+                                <div class="comments">
+                                    <div class="comment">
+                                        <a class="avatar">
+                                            <img src="../media/UserIcon/Default/default_male.png">
+                                        </a>
+                                        <div class="content">
+                                            <a class="author">Jenny Hess</a>
+                                            <div class="metadata">
+                                                <span class="date">Just now</span>
+                                            </div>
+                                            <div class="text">
+                                                Elliot you are always so right :)
+                                            </div>
+                                            <div class="actions">
+                                                <a class="reply">Reply</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="comment">
+                                <a class="avatar">
+                                    <img src="../media/UserIcon/Default/default_male.png">
+                                </a>
+                                <div class="content">
+                                    <a class="author">Joe Henderson</a>
+                                    <div class="metadata">
+                                        <span class="date">5 days ago</span>
+                                    </div>
+                                    <div class="text">
+                                        Dude, this is awesome. Thanks so much
+                                    </div>
+                                    <div class="actions">
+                                        <a class="reply">Reply</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <form class="ui reply form">
+                                <div class="field">
+                                    <textarea></textarea>
+                                </div>
+                                <div class="ui blue labeled submit icon button">
+                                    <i class="icon edit"></i> Add Reply
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+<div class="ui basic modal" id="nostor">
+
+    <h1>There is no enough storage for your purchase !</h1>
+
+
+    <div class="actions">
+        <div class="ui green ok inverted button">
+            <i class="checkmark icon"></i>
+            Ok
+        </div>
+    </div>
+</div>
+
+<br/>
+<br/>
+<br/>
+
+<div class="ui vertical footer segment">
+    <div class="ui center aligned container">
+        <div class="ui horizontal small divided link list">
+            <a class="item"><img src="../media/logos.ico" class="ui centered mini image"></a>
+            <a class="item" href="#" onclick="window.location.href='homepage.html'">
+                <strong style="color: black">About Us</strong>
+            </a>
+            <a class="item" href="#">
+                <strong style="color: black" onclick="window.location.href='UseragreementsUnique.html'">Privacy
+                    Policy</strong>
+            </a>
+        </div>
+        <div>
+            &nbsp©&nbsp Copyright 2020 DS Group 4
+        </div>
+    </div>
+</div>
+
+</div>
+<!--modals--------------------------------------------------------------------------------------------------------------->
+<div class="ui add cart modal">
+
+    <p style="font-size: 3em; text-align: center"> Product added successful</p>
+
+    <div class="content">
+        <p style="font-size: 2.5em; text-align: center"></p>
+    </div>
+    <div class="actions">
+        <div class="ui green ok inverted button">
+            <i class="checkmark icon"></i>
+            Yes
+        </div>
+    </div>
+</div>
+
+<div class="ui not enough basic modal">
+
+    <p style="font-size: 3em; text-align: center">There is no enough storage for your request</p>
+
+    <div class="actions">
+        <div class="ui green ok inverted button">
+            <i class="checkmark icon"></i>
+            Yes
+        </div>
+    </div>
+</div>
+
+
+<div class="ui choose color modal">
+
+    <p style="font-size: 3em; text-align: center">Please choose a color!</p>
+
+    <div class="content">
+        <p style="font-size: 2.5em; text-align: center"></p>
+    </div>
+    <div class="actions">
+        <div class="ui green ok inverted button">
+            <i class="checkmark icon"></i>
+            OK!
+        </div>
+    </div>
+</div>
+
+
+<div class="ui addadd modal">
+
+    <p style="font-size: 3em; text-align: center">Please Set your address!</p>
+
+    <div class="content">
+        <p style="font-size: 2.5em; text-align: center"></p>
+    </div>
+    <div class="actions">
+        <div class="ui green ok inverted button" onclick="Setadd()">
+            <i class="checkmark icon"></i>
+            Set address
+        </div>
+    </div>
+</div>
+
+
+<div class="ui addphone modal">
+
+    <p style="font-size: 3em; text-align: center">Please Set your Phone number!</p>
+
+    <div class="content">
+        <p style="font-size: 2.5em; text-align: center"></p>
+    </div>
+    <div class="actions">
+        <div class="ui green ok inverted button" onclick="Setphone()">
+            <i class="checkmark icon"></i>
+            Set address
+        </div>
+    </div>
+</div>
+
+
+<div class="ui buy sus modal">
+
+    <p style="font-size: 3em; text-align: center">You have successfully bought it</p>
+
+    <div class="content">
+        <p style="font-size: 2.5em; text-align: center"></p>
+    </div>
+    <div class="actions">
+        <div class="ui green ok inverted button">
+            <i class="checkmark icon"></i>
+            Yes
+        </div>
+    </div>
+</div>
+
+
+<div class="ui nomoney modal">
+
+    <p style="font-size: 3em; text-align: center">You have no enough money to buy it</p>
+
+    <div class="content">
+        <p style="font-size: 2.5em; text-align: center"></p>
+    </div>
+    <div class="actions">
+        <div class="ui red inverted button" onclick="window.location.href='ModifyUserInfo.html'">
+            Go Charge
+        </div>
+    </div>
+</div>
+
+
+<div class="ui buy normal modal">
+
+    <p style="font-size: 3em; text-align: center">Please check your information!</p>
+
+    <table class="ui padded table cc_cursor">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Products</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td id="recname">John</td>
+            <td id="phone">John</td>
+            <td id="recadd">Approved</td>
+            <td id="recproduct">He is a very nice guy and I enjoyed talking to him on the telephone. I hope we get to
+                talk again.
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+
+    <div class="actions">
+        <div class="ui green ok inverted button" onclick="confirmbuy()">
+            <i class="checkmark icon"></i>
+            I Confirm!
+        </div>
+        <div class="ui red cancel button">
+            <i class="remove icon"></i>
+            No
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+</html>

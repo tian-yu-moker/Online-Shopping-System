@@ -1,0 +1,144 @@
+[
+  [
+    {
+      "header": "Iphone 12",
+      "description1": "5G",
+      "description2": "A14 Chip",
+      "description3": "Dual-camera System"
+    },
+    {
+      "header": "Huawei P40 Pro",
+      "description1": "Kylin 990 Chip",
+      "description2": "Leica Camera",
+      "description3": "90Hz Screen"
+    },
+    {
+      "header": "Galaxy S20",
+      "description1": "AMOLED Screen",
+      "description2": "Qualcomm 865 Chip",
+      "description3": "5G"
+    },
+    {
+      "header": "Galaxy Z Fold2",
+      "description1": "Folding Mobile ",
+      "description2": "Qualcomm 865 Chip",
+      "description3": "Coolest product"
+    },
+    {
+      "header": "Iphone 12 mini",
+      "description1": "5G",
+      "description2": "A14 Chip",
+      "description3": "Small on your hand"
+    },
+    {
+      "header": "Iphone 12 mini",
+      "description1": "5G",
+      "description2": "A14 Chip",
+      "description3": "Small on your hand"
+    },
+    {
+      "header": "MI 10",
+      "description1": "5G",
+      "description2": "Qualcomm 865 Chip",
+      "description3": "Quadruple camera"
+    },
+    {
+      "header": "MI 10 Lite",
+      "description1": "5G",
+      "description2": "Qualcomm 730 Chip",
+      "description3": "For young"
+    }
+  ],
+  [
+    {
+      "header": "Galaxy Book 15",
+      "description1": "5G",
+      "description2": "Qualcomm 730 Chip",
+      "description3": "For young"
+    },
+    {
+      "header": "",
+      "description": ""
+    },
+    {
+      "header": "",
+      "description": ""
+    },
+    {
+      "header": "",
+      "description": ""
+    },
+    {
+      "header": "",
+      "description": ""
+    },
+    {
+      "header": "",
+      "description": ""
+    },
+    {
+      "header": "",
+      "description": ""
+    },
+    {
+      "header": "",
+      "description": ""
+    }
+  ],
+  [
+    {
+      "header": "IPad",
+      "description1": "",
+      "description2": "",
+      "description3": ""
+    },
+    {
+      "header": "Galaxy Tab S5e",
+      "description": ""
+    },
+    {
+      "header": "Galaxy Tab S7",
+      "description": ""
+    },
+    {
+      "header": "Galaxy Tab S6Lite",
+      "description": ""
+    },
+    {
+      "header": "IPad Air New",
+      "description": ""
+    },
+    {
+      "header": "IPad Mini New",
+      "description": ""
+    }
+  ],
+  [
+    {
+      "header": "AirPods",
+      "description1": "",
+      "description2": "",
+      "description3": ""
+    },
+    {
+      "header": "AirPods Pro",
+      "description": ""
+    },
+    {
+      "header": "AKG N700",
+      "description": ""
+    },
+    {
+      "header": "AKG Y100",
+      "description": ""
+    },
+    {
+      "header": "AKG Y500",
+      "description": ""
+    },
+    {
+      "header": "AKG Y600NC",
+      "description": ""
+    }
+  ]
+]

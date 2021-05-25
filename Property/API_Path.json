@@ -1,0 +1,9 @@
+{
+  "url_major": "http://localhost:8081/E_mall_API/",
+  "url_addition": "",
+  "login": "UserLogin",
+  "register": "Register",
+  "emailVerify": "EmailVerify",
+  "orderList": "OrderHistory",
+  "confirmOrder": "OrderConfirmation"
+}

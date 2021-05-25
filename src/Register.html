@@ -1,0 +1,689 @@
+<!--
+@Author: Tian Yu 17722024
+@Time: 2020.10.11
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MER-OCR Register</title>
+
+    <script type="text/javascript" src="../assets/plugins/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../assets/plugins/semantic/semantic.js"></script>
+    <link rel="stylesheet" type="text/css" href="../assets/plugins/semantic/semantic.css">
+    <!-- Standard Meta -->
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <!-- Site Properties -->
+
+    <script src="../assets/plugins/semantic/components/form.js"></script>
+    <script src="../assets/plugins/semantic/components/transition.js"></script>
+    <script type="text/javascript" src="../js/MD5.js"></script>
+    <script type="text/javascript" src="../js/AllUrlsJson.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+    <script type="text/javascript" src="../js/AesFunction.js"></script>
+    <script type="text/javascript" src="../js/ReadProperties.js"></script>
+
+</head>
+
+
+<body>
+<!--Background video-->
+<video autoplay loop muted>
+    <source src="../media/register_page.mp4" type="video/mp4"  />
+    Your browser does not support the video tag.
+</video>
+<!--Sign up area-->
+<div class="ui middle aligned center aligned grid">
+    <div class="column">
+
+        <h2 class="ui teal image header">
+            <div class="content" style="color: #000000; font-size: 20px">
+                MER-OCR System
+            </div>
+            <div class="content" style="color: #000000; align-items: center;font-size: 30px">
+                Sign Up A New Account
+            </div>
+        </h2>
+
+        <form class="ui large form" onsubmit="return false">
+            <div class="ui stacked segment">
+                <!--Email-->
+                <div class="required field">
+                    <label style=" text-align: left">
+                        Email
+                    </label>
+                    <div class="ui left icon input">
+                        <i class="envelope icon"></i>
+                        <input type="text" name="email" placeholder="E-mail address">
+                    </div>
+                </div>
+                <!--User Name-->
+                <div class="required field">
+                    <label style=" text-align: left">
+                        User Name
+                    </label>
+                    <div class="ui left icon input">
+                        <i class="user icon"></i>
+                        <input type="text" name="username" placeholder="User name">
+                    </div>
+                </div>
+                <!--Password-->
+                <div class="required field">
+                    <label style=" text-align: left">
+                        Set your password
+                    </label>
+                    <div class="ui left icon input">
+                        <i class="lock icon"></i>
+                        <input type="password" name="first_password" placeholder="Password">
+                    </div>
+                </div>
+
+                <!--Confirm password-->
+                <div class="required field">
+                    <label style="text-align: left">
+                        Confirm you password again
+                    </label>
+                    <div class="ui left icon input ">
+                        <i class="redo alternate icon"></i>
+                        <input type="password" name="confirm_password" placeholder="Confirm password again" data-equal-to="#password1">
+                    </div>
+                </div>
+
+                <!--Gender-->
+                <div class="required field">
+                    <label style="text-align: left">Gender</label>
+                    <div class="ui fluid selection dropdown">
+                        <div class="default text">
+                            <i class="venus mars icon"></i>
+                            Gender
+                        </div>
+                        <input name="gender" type="hidden">
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                            <div class="item" data-value="Male">Male</div>
+                            <div class="item" data-value="Female">Female</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Verification code-->
+                <div class="required field">
+                    <label style="text-align: left">
+                        Verification code
+                    </label>
+                    <div class="ui right action left icon input">
+                        <i class="check circle icon"></i>
+                        <input type="text" name="emailVerifyCode" class="emailVerifyCode" placeholder="Verify code in your email">
+                        <button class="ui teal button" type="submit" onclick="startVerify(this)">
+                            <i class="upload icon"></i>
+                            Send
+                        </button>
+                    </div>
+                </div>
+
+                <div class="inline required field" align="left">
+                    <div class="ui checkbox">
+                        <input name="licences" type="checkbox">
+                        <label>
+                            I agree to all the
+                            <a href="#" onclick="openUserAgreements()">
+                                Licences of The Platform
+                                <i class="question circle icon"></i>
+                            </a>
+                        </label>
+                    </div>
+                </div>
+                <!--Submit button-->
+                <button class="ui primary button" type="submit" onclick="register()">
+                    Sign Up Now
+                </button>
+
+                <div class="ui clear button">
+                    Clear
+                </div>
+            </div>
+            <!--Form check, if wrong, display error message-->
+            <div class="ui error message"></div>
+        </form>
+    </div>
+</div>
+
+<div class="ui repetition mini modal" id="repetition_modal">
+    <div class="header">
+        <i class="exclamation icon"></i>
+        Message
+    </div>
+    <div class="content">
+        <p>The email has been registered!</p>
+        <p>Please login directly.</p>
+    </div>
+    <div class="actions">
+        <div class="ui negative right labeled icon red button">
+            OK
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
+<div class="ui success mini modal" id="success_modal">
+    <div class="header">
+        <i class="envelope outline icon"></i>
+        Message
+    </div>
+    <div class="content">
+        <p>Sign Up Successfully!</p>
+        <p>Go back to Login page</p>
+    </div>
+    <div class="actions">
+        <div class="ui positive right labeled icon button" onclick="window.location.href='Login.html'">
+            OK
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
+<div class="ui success mini modal" id="error_modal">
+    <div class="header">
+        <i class="exclamation icon"></i>
+        Message
+    </div>
+    <div class="content">
+        <p>Some Error!</p>
+        <p>Please try again later</p>
+    </div>
+    <div class="actions">
+        <div class="ui negative right labeled icon red button">
+            OK
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
+<!--User agreements-->
+<div class="ui modal" id="license_modal">
+    <div class="header">User Agreements</div>
+    <div class="scrolling content">
+        <p1>Dear users, welcome to register as a user of this website.</p1>
+
+        <p></p>
+        <p>Please read the following terms of Service carefully before registering: Both parties hereto shall be the users of the Website and this Service Agreement shall have the effect of the contract.</p>
+
+        <p>Upon your confirmation of this Service Agreement, this Service Agreement shall become legally binding between you and the Website. Please read all the contents of the Service Agreement carefully before registration. If you have any questions, please contact this website.</p>
+
+        <p>Regardless of whether or not you actually read this Service Agreement carefully before registration, by clicking the &quot;Register&quot; button below the original agreement and successfully registering as a user in accordance with the registration procedures of this Website, your actions still indicate that you agree to and sign this Service Agreement.</p>
+
+        <p>I. Confirmation and acceptance of the terms of service of this website the ownership and operation rights of the services on the Website shall remain with the Website.</p>
+
+        <p> II. The user must: <br />(1) Equip yourself with all necessary Internet access equipment, including personal computer, modem or other necessary Internet access devices. <br />(2) To bear the telephone and Internet charges related to this service.</p>
+
+        <p> III. Users shall not post the following illegal information on the trading platform of the Website:<br /> (1) those concerning the basic principles defined in the Constitution; <br />(2) Endangering national security, divulging state secrets, subverting state power or undermining national unity;<br /> (3) damaging the honor and interests of the State; <br />(4) Inciting ethnic hatred and discrimination and undermining ethnic unity; <br />(5) undermining the state's religious policies and promoting cults and feudal superstitions; <br />(6) spreading rumors, disturbing social order and undermining social stability; <br />(7) disseminating obscenity, pornography, gambling, violence, murder, terror or abetting crimes; <br />(8) insulting or slandering others, or infringing upon others' lawful rights and interests; <br />(9) other contents prohibited by laws and administrative regulations.</p>
+
+        <p> IV. Relevant Personal Data User agrees:<br /> (1) Provide timely, detailed and accurate personal data.<br /> (2) Agree to receive information from the Website. <br />(3) Constantly update the registration information to meet the requirements of timely, detailed and accurate. All data originally typed will be referenced as registration data.<br /> (4) The Website does not disclose the user's name, address, email address and pseudonym, except that <br />(a) The User authorizes the Website to disclose such information.<br /> (b) The relevant laws and procedures require the Website to provide users' personal data. If the information provided by the user contains incorrect information, the Website reserves the right to terminate the user's right to use the Information services provided by the Website.</p>
+
+        <p>V. When registering, users should choose E-mail addresses with relatively good stability and security, and agree to accept and read them All kinds of E-mail sent by this website to users. If the user fails to receive the E-mail from his/her own E-mail address in time or the E-mail cannot be normally received or read due to the problems in the receiving and reading program of the user's E-mail address or user's E-mail, as long as the Website sends the E-mail successfully, it shall be deemed that the user has received the relevant E-mail. The time when an E-mail is sent is recorded on the sending server as the time of delivery.</p>
+
+        <p>Vi. The user shall select a common mobile phone number for registration and agree to accept and read each mobile phone number sent to the user by this website SMS message. If the user fails to receive SMS messages from his/her mobile phone in time or the SMS messages cannot be received or read due to the problems of the user's mobile phone or the user's SMS receiving and reading program itself, as long as the website successfully sends SMS messages, it shall be deemed that the user has received the relevant SMS messages. The user should fill in the correct and valid mobile phone number when registering, which can be used to retrieve the password. If the password cannot be retrieved due to the user's failure to fill in the correct and valid mobile phone number or the user's failure to log in the website correctly, the Website shall not assume the relevant responsibilities.</p>
+
+        <p>Vii. Amendments to the Terms of Service The Website reserves the right to modify the Terms of Service if necessary. In the event of any change to the Terms of Service of the Website, the modification content will be prompted on the important page. If you do not agree with the changed content, users can voluntarily cancel the information service of this website. If users continue to enjoy the information services of the Website, they will be deemed to accept the change of the terms of Service. The Website reserves the right to modify or interrupt the service at any time without notifying the User. The website exercises the right to modify or interrupt the service without any liability to users or third parties.</p>
+
+        <p>Viii. User Privacy Policy Respect for users' privacy is a basic policy of this website. So, this website will not be without legitimate users authorized to open, edit, or disclose its registration data and stored in the non-public content in this website, unless there are legal licensing requirements or this website in good faith on the basis of think according to these information is necessary in the following four conditions: <br />(1) abide by the laws and regulations, comply with the legal services program this web site. <br />(2) Maintain and maintain the trademark ownership of the Website. <br />(3) Make every effort to protect the privacy and security of users and the public in case of emergency. <br />(4) Meet other relevant requirements. This website reserves the right to publish member population analysis information.</p>
+
+        <p>Viiii. The user's account, password, and security Once you have successfully registered as a user, you will be given a password and account. If you do not keep your account and password secure, you will be fully responsible. In addition, each user is fully responsible for all activities and events in their account. You can change your password as directed at any time, or you can close your old account and start a new one. User agrees to notify the website immediately of any unauthorized use of user's account or security breach.</p>
+
+        <p>X. Refusal to provide security The User expressly agrees that the use of the Information service is at the user's personal risk. This website does not guarantee that the service will not be interrupted. It does not guarantee the timeliness, security and occurrence of errors of the service, but it will avoid errors to the extent of its ability.</p>
+
+        <p>Xi. Limited liability The Website shall not be liable for any direct, indirect, incidental, special or consequential damages arising from improper use of the Services of the Website or non-conforming information transmitted by users, etc. These behaviors may cause damage to the image of this website, so this website puts forward the possibility of such damage in advance and tries to avoid the occurrence of such damage.</p>
+
+        <p>Xii. Storage and restriction of Information The Website has the right to determine whether the user's behavior conforms to the requirements and spirit of the Terms of Service of the Website. If the user violates the provisions of the Terms of Service of the Website, the Website has the right to interrupt the account of the service.</p>
+
+        <p>Xiii. User management Users must follow: <br />(1) Do not use the information service for illegal purposes. <br />(2) No interference or confusion of network services. <br />(3) Comply with all network protocols, regulations, procedures and practices for the use of the Service. The user's code of conduct is based on Internet regulations, policies, procedures and practices.</p>
+
+        <p>Xiv. Protection User agrees to protect and protect the interests of all members of the Website, and shall be responsible for paying the attorney fees caused by user's use of the service scope beyond the scope, damages for breach of the terms of service, and recourse fees for other people's use of user's computer, account number and other intellectual property rights.</p>
+
+        <p>Xv. Termination of service The User or the Website may discontinue one or more of the services at any time as the case may be. The Website is not liable to any individual or third party for interruption of service at any time. If the User objects to any proposal of the Terms of Service or has any objection to any subsequent amendment of the terms of Service, or is dissatisfied with the service of the Website, the User may exercise the following rights: <br />(1) No longer use the Information Service of the Website. <br />(2) Notify the Website to stop providing services to the user. Upon termination of the user's services, the user's right to use the Services of the Website shall be immediately suspended. From then on, the User has no right and the Website has no obligation to transmit any unprocessed information or unfinished services to the User or third parties.</p>
+
+        <p>Xvi. Circulars All notifications to users can be delivered via announcements on important pages or by E-mail or regular mail. Changes to the terms of Service, changes to the service, or other notices of important events will be made in this form.</p>
+
+        <p>Xvii. Ownership of information content The information content defined on this website includes: text, software, sound, photos, videos, and charts; All the content in the advertisement; Other information provided by this website to users. All such content is protected by copyright, trademark, label and other property ownership laws. Therefore, users may use such content only under the authorization of the Site and the Advertiser, and may not arbitrarily copy, reproduce, or create derivative products related to such content. </p></div>
+    <div class="actions">
+        <div class="ui black deny button" onclick="disagreeLicense()">
+            Don't Agree
+        </div>
+        <div class="ui positive right labeled icon button" onclick="agreeLicense()">
+            Yes, I Agree
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
+
+</body>
+
+<script>
+    let allServerInfo;
+    window.onload = function ()
+    {
+        allServerInfo = urlJson;
+    }
+    /*
+    Form validation of the register page
+     */
+    /*
+    Sign up process
+    1. Check if the all the form items are valid
+    2. If so, send all the message to the API server
+    3. If not, display the error message on the screen
+     */
+    let isAllValid = false;
+    function register()
+    {
+        $(".ui.form").form
+        (
+            {
+                fields: {
+                    email: {
+                        identifier: 'email',
+                        rules: [
+                            {
+                                type: 'empty',
+                                prompt: 'Please enter your e-mail'
+                            },
+                            {
+                                type: 'email',
+                                prompt: 'Please enter a valid e-mail'
+                            }
+                        ]
+                    },
+                    username: {
+                        identifier: 'username',
+                        rules: [
+                            {
+                                type: 'empty',
+                                prompt: 'Please enter your user name'
+                            },
+                            {
+                                type: 'maxLength[10]',
+                                prompt: 'Your user name should least than 10 characters'
+                            }
+                        ]
+                    },
+                    first_password: {
+                        identifier: 'first_password',
+                        rules: [
+                            {
+                                type: 'empty',
+                                prompt: 'Please enter your password'
+                            },
+                            {
+                                type: 'length[6]',
+                                prompt: 'Your password must be at least 6 characters'
+                            }
+                        ]
+                    },
+                    confirm_password: {
+                        identifier: 'confirm_password',
+                        rules: [
+                            {
+                                type: 'empty',
+                                prompt: 'Please enter your password again'
+                            },
+                            {
+                                type: 'match[first_password]',
+                                prompt: 'Two passwords must the same'
+                            }
+                        ]
+                    },
+                    licences: {
+                        identifier: 'licences',
+                        rules: [
+                            {
+                                type   : 'checked',
+                                prompt : 'You must agree to the license of the platform'
+                            }
+                        ]
+                    },
+                    gender: {
+                        identifier: 'gender',
+                        rules: [
+                            {
+                                type: 'empty',
+                                prompt: 'Select a gender'
+                            }
+                        ]
+                    },
+                    emailVerifyCode: {
+                        identifier: 'emailVerifyCode',
+                        rules: [
+                            {
+                                type: 'empty',
+                                prompt: 'Please enter the verification code'
+                            },
+                            {
+                                type: 'email_verify_code',
+                                prompt: 'Incorrect verification code'
+                            }
+                        ]
+                    }
+                }
+            }
+        );
+
+        let isEmailValid = $('.ui.form').form('is valid', 'email');
+        let isUserNameValid = $('.ui.form').form('is valid', 'username');
+        let isGenderValid =  $('.ui.form').form('is valid', 'gender');
+        let isPasswordFirstValid = $('.ui.form').form('is valid', 'first_password');
+        let isPasswordConfirmValid = $('.ui.form').form('is valid', 'confirm_password');
+        let isVerifyValid = $('.ui.form').form('is valid', 'emailVerifyCode');
+        let isLicencesValid = $('.ui.form').form('is valid', 'licences');
+        let allCorrect = isEmailValid && isUserNameValid && isGenderValid && isPasswordFirstValid
+            && isPasswordConfirmValid && isVerifyValid && isLicencesValid;
+        if(!isVerifyValid)
+            $(".emailVerifyCode").val('');
+        if(allCorrect && !isAllValid)
+        {
+            queryService();
+            isVerifyValid = true;
+        }
+    }
+    /*
+    Get all the contents in each fields
+    Then use ajax to query the API servers
+     */
+    function queryService()
+    {
+        /*
+        Get the contents
+        */
+        let userEmail = $('.ui.form').form('get value', 'email');
+        let userName = $('.ui.form').form('get value', 'username');
+        let password = $('.ui.form').form('get value', 'first_password');
+        /*
+        Utilize MD5 technology to realize the encryption of password
+         */
+        let passwordLock = hex_md5(password);
+        let gender = $('.ui.form').form('get value', 'gender');
+
+        let submitData = {
+            "email": encryptOneString(userEmail, aseKey, iv),
+            "userName": encryptOneString(userName, aseKey, iv),
+            "password": encryptOneString(passwordLock, aseKey, iv),
+            "sex": encryptOneString(gender, aseKey, iv)
+        };
+
+        let urlMajor = allServerInfo.url_major + allServerInfo.register;
+        let urlAddition = allServerInfo.url_addition + allServerInfo.register;
+        submitData = JSON.stringify(submitData);
+
+        /*
+        Ajax to query web service
+         */
+
+        let query = $.ajax
+        ({
+            type: "POST",
+            url: urlMajor,
+            data: submitData,
+            dateType: 'JSON',
+            async: true,
+            cache : false,
+            success: function (res,status,xhr)
+            {
+                alert(res + " " + status);
+                if(xhr.status == '200')
+                {
+                    let response = jQuery.parseJSON(res);
+                    //Get the verify code
+                    if(response.status == '00')
+                    {
+                        $('#success_modal')
+                            .modal('setting', 'closable', false)
+                            .modal('show');
+                    }
+                    else if(response.status == '04')
+                    {
+                        $('#repetition_modal')
+                            .modal('setting', 'closable', false)
+                            .modal('show');
+                    }
+                    else
+                    {
+                        $('#error_modal')
+                            .modal('setting', 'closable', false)
+                            .modal('show');
+                    }
+                }
+            },
+            fail: function(res)
+            {
+                $('#error_modal')
+                    .modal('setting', 'closable', false)
+                    .modal('show');
+            },
+            error: function(res)
+            {
+                $('#error_modal')
+                    .modal('setting', 'closable', false)
+                    .modal('show');
+            }
+        });
+    }
+
+    /*
+   Show the user agreements, on a closeable modal
+   */
+    window.openUserAgreements = function ()
+    {
+        $('#license_modal').modal('show');
+    }
+    /*
+    Agree with the agreements
+    */
+    function agreeLicense()
+    {
+        $('.ui.checkbox').checkbox('check', 'licences')
+    }
+    /*
+    Disagree with the agreements
+    */
+    function disagreeLicense()
+    {
+        $('.ui.checkbox').checkbox('uncheck', 'licences')
+    }
+    /*
+    Initialize the selective menu
+     */
+    $('.ui.selection.dropdown').dropdown();
+
+    let countdown = 7;
+    let isSend = false;
+    let getCode = '';
+    function startVerify(val)
+    {
+        $(".ui.form").form
+        (
+            {
+                fields: {
+                    email: {
+                        identifier: 'email',
+                        rules: [
+                            {
+                                type: 'empty',
+                                prompt: 'Please enter your e-mail'
+                            },
+                            {
+                                type: 'email',
+                                prompt: 'Please enter a valid e-mail'
+                            }
+                        ]
+                    },
+                    username: {
+                        identifier: 'username',
+                        rules: [
+                            {
+                                type: 'empty',
+                                prompt: 'Please enter your user name'
+                            },
+                            {
+                                type: 'maxLength[10]',
+                                prompt: 'Your user name should least than 10 characters'
+                            }
+                        ]
+                    },
+                    gender: {
+                        identifier: 'gender',
+                        rules: [
+                            {
+                                type: 'empty',
+                                prompt: 'Select a gender'
+                            }
+                        ]
+                    }
+                }
+            }
+        );
+
+        let isEmailValid = $('.ui.form').form('is valid', 'email');
+        let isUserNameValid = $('.ui.form').form('is valid', 'username');
+        let isGenderValid =  $('.ui.form').form('is valid', 'gender');
+
+        if(isEmailValid && isUserNameValid && isGenderValid)
+        {
+            queryVerifyCodes();
+            if(!isSend)
+                isSend = true;
+            counter(val);
+        }
+    }
+
+    /*
+        Timer, 7s
+    */
+    function counter(val)
+    {
+        if (countdown == 0)
+        {
+            val.removeAttribute("disabled");
+            val.innerHTML = "Send";
+            countdown = 7;
+            isSend = false;
+        }
+        else
+        {
+            val.setAttribute("disabled", true);
+            val.innerHTML = "Waiting..(" + countdown + "s)";
+            countdown--;
+            setTimeout(function()
+            {
+                counter(val)
+            }, 1000);
+        }
+    }
+
+    /*
+    Send the email verify code
+     */
+    function queryVerifyCodes()
+    {
+        /*
+        Get the target user email, name and gender
+         */
+        let registerEmail = $('.ui.form').form('get value', 'email');
+        let userName = $('.ui.form').form('get value', 'username');
+        let userGender = $('.ui.form').form('get value', 'gender');
+        console.log(registerEmail + " " + userName + " " +userGender);
+        let jsonObject = {
+            "email": registerEmail.toString(),
+            "username": userName.toString(),
+            "sex": userGender.toString()
+        };
+        console.log(jsonObject);
+        let url_major = allServerInfo.url_major + allServerInfo.emailVerify;
+        let url_addition = allServerInfo.url_addition + allServerInfo.emailVerify;
+        jsonObject = JSON.stringify(jsonObject);
+
+        $.ajax
+        ({
+            type: "POST",
+            url: url_major,
+            data: jsonObject,
+            dateType: 'JSON',
+            async : true,
+            cache : false,
+            success: function (res,status,xhr)
+            {
+                if(xhr.status == '200')
+                {
+                    let response = jQuery.parseJSON(res);
+                    //Get the verify code
+                    if(response.status == '00')
+                        getCode = response.body.toString();
+                }
+            },
+            fail: function(res)
+            {
+                console.log(res + " Fail");
+            },
+            error: function(res)
+            {
+                console.log(res + " Error");
+            }
+        });
+    }
+
+    /*
+    Form validation for email verification code
+     */
+    $.fn.form.settings.rules.email_verify_code = function ()
+    {
+        let emailCode = $('.ui.form').form('get value', 'emailVerifyCode');
+        emailCode = hex_md5(emailCode);
+        if(getCode != emailCode)
+            return false;
+        else
+            return true;
+    }
+
+
+</script>
+
+<style type="text/css">
+    body {
+        background-color: #DADADA;
+    }
+    body > .grid {
+        height: 100%;
+    }
+    .image {
+        margin-top: -100px;
+    }
+    .column {
+        max-width: 450px;
+    }
+</style>
+
+<style>
+    *{
+        margin: 0px;
+        padding: 0px;
+    }
+    video{
+        position: fixed;
+        right: 0px;
+        bottom: 0px;
+        min-width: 100%;
+        min-height: 100%;
+        height: auto;
+        width: auto;
+        z-index:-11
+    }
+    source{
+        min-width: 100%;
+        min-height: 100%;
+        height: auto;
+        width: auto;
+    }
+</style>
+
+</html>

@@ -1,0 +1,493 @@
+<!--
+@Author: Tian Yu 17722024
+@Time: 2020.10.18
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order List</title>
+    <link rel="shortcut icon" href="../media/logos.ico" />
+    <link rel="stylesheet" href="../assets/plugins/layui-v2.5.6/layui/layui.css" media="all">
+    <script src="../assets/plugins/layui-v2.5.6/layui/layui.js"></script>
+    <script script type="text/javascript" src="../assets/plugins/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../assets/plugins/semantic/semantic.js"></script>
+    <link rel="stylesheet" type="text/css" href="../assets/plugins/semantic/semantic.css">
+    <script src="../assets/plugins/layui-v2.5.6/layui/lay/modules/laypage.js"></script>
+    <script type="text/javascript" src="../js/AllUrlsJson.js"></script>
+</head>
+<body>
+<div class="ui top inverted menu">
+    <div class="ui item">
+        <img src="../media/logos.ico">
+    </div>
+    <a class="item" href="MainPage.html">
+        <i class="globe icon"></i>
+        Main Page
+    </a>
+    <a class="item" href="ShopCart.html">
+        <i class="cart icon"></i>
+        Shopping Cart
+    </a>
+    <a class="item" href="OrderList.html">
+        <i class="file alternate icon"></i>
+        Order List
+    </a>
+    <a class="item" href="Administrator.html">
+        <i class="user secret icon"></i>
+        Administrator
+    </a>
+    <div class="right menu">
+        <div class="item">
+            <img class="ui avatar image" id="user_header_menu_icon" src="">
+            <a class="text" id="user_menu_name" href="ModifyUserInfo.html">Username</a>
+        </div>
+        <a class="item" href="Login.html">
+            <i class="logout icon"></i>
+            Logout
+        </a>
+    </div>
+</div>
+<div class="ui fluid container">
+    <div class="ui equal width grid">
+        <div class="column"></div>
+        <div class="ten wide column">
+            <div class="ui center aligned container">
+                <div class="ui statistic">
+                    <div class="value">
+                        <i class="file alternate outline icon" style="text-align: center"></i>
+                        User Order List
+                        <p></p>
+                    </div>
+                </div>
+            </div>
+
+            <p></p>
+            <table id="demo" lay-filter="test"></table>
+        </div>
+        <div class="column"></div>
+        <div class="footer">
+            <div class="ui center aligned container">
+                <div class="ui horizontal small divided link list">
+                    <a class="item"><img src="../media/logos.ico" class="ui centered mini image"></a>
+                    <a class="item" href="#" onclick="window.location.href='homepage.html'">
+                        <strong style="color: black">About Us</strong>
+                    </a>
+                    <a class="item" href="#" onclick="window.location.href='UseragreementsUnique.html'">
+                        <strong style="color: black">Privacy Policy</strong>
+                    </a>
+                    <div class="item" style="color: black">
+                        &nbsp©&nbsp Copyright 2020 DS Group 4
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="ui small modal" id="order_details_modal">
+    <div class="header">
+        <i class="file alternate outline icon"></i>
+        Order Detail
+    </div>
+    <div class="content" id="order_detail_content">
+        <di class="ui grid">
+            <div class="four wide column">
+                <div class='black card' onmouseover='modal_card_animation(this)' onmouseleave='onRemove()'>
+                    <img src="2.png">
+                </div>
+            </div>
+            <div class="one wide column"></div>
+            <div class="eleven wide column">
+                <div class="ui bulleted list">
+                    <div class="item" id="user_email" style="font-size: 20px">
+                    </div>
+                    <div class="item" id="user_phone" style="font-size: 20px">
+                    </div>
+                    <div class="item" id="order_amount" style="font-size: 20px">
+                    </div>
+                    <div class="item" id="order_color" style="font-size: 20px"></div>
+                    <div class="item" id="order_status" style="font-size: 20px">
+                    </div>
+                    <p></p>
+                    <div class="ui labeled button" tabindex="0">
+                        <button class="ui primary button" id="order_confirm">
+                            <i class="hand pointer outline icon"></i>
+                        </button>
+                        <label class="ui basic left pointing label">
+                            Thanks
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </di>
+    </div>
+    <div class="actions">
+        <div class="ui positive right labeled icon button">
+            OK
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
+<div class="ui mini modal" id="confirm_modal">
+    <div class="header">
+        <i class="question circle icon"></i>
+        Finish this order?
+    </div>
+    <div class="content">
+        Click OK to finish it.
+    </div>
+    <div class="actions">
+        <div class="ui positive right labeled icon button" lay-event="confirm">
+            Yes
+            <i class="checkmark icon"></i>
+        </div>
+        <div class="ui negative button">
+            Cancel
+        </div>
+    </div>
+</div>
+
+</body>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="show">Show Details</a>
+
+</script>
+<script type="text/html" id="toolbar">
+    <a href="#" onclick="exportTable()">
+        <i class="file excel icon"></i>
+        Export Table
+    </a>
+</script>
+
+
+<script>
+
+    let jsonData;
+    let userInfo;
+    let tableData = [];
+    window.onload = function ()
+    {
+        $('.layui-laypage-btn').innerHTML = "Go";
+        jsonData = urlJson;
+        let url_major = jsonData.url_major + jsonData.orderList;
+        let url_addition = jsonData.url_addition + jsonData.orderList;
+        userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+
+        if(JSON.parse(sessionStorage.getItem('IconPath')).hasIcon == '1')
+            $('#user_header_menu_icon').attr('src', urlJson.url_major + urlJson.PictureDownload + "?email=" + userInfo.email);
+        else if(JSON.parse(sessionStorage.getItem('IconPath')).hasIcon == '0')
+            $('#user_header_menu_icon').attr('src', userInfo.userIconPath);
+
+        $('#user_menu_name').html(userInfo.userName);
+
+        let submitData = {
+            "email": userInfo.email
+        };
+        submitData = JSON.stringify(submitData);
+
+        $.ajax({
+            url: url_major,
+            type: 'POST',
+            data: submitData,
+            dateType: "json",
+            async: false,
+            success: function (res,status,xhr)
+            {
+                let responseData = jQuery.parseJSON(res);
+                //console.log(responseData.body)
+                let resBody = responseData.body;
+                if(xhr.status == 200)
+                {
+                    let length = responseData.body.length;
+                    for(let i = 0; i < length; i++)
+                    {
+                        let data = {};
+                        data.order_id = resBody[i].order_id;
+                        data.create_time = resBody[i].create_time;
+                        data.address = resBody[i].address;
+                        data.price = resBody[i].price;
+                        let type = resBody[i].category;
+                        if(type == 1)
+                            data.product_type = "Laptop";
+                        else if(type == 2)
+                            data.product_type = "Mobile";
+                        else if(type == 3)
+                            data.product_type = "Tablet";
+                        else if(type == 4)
+                            data.product_type = "Earphone";
+                        else
+                            data.product_type = "Others";
+                        let brand = resBody[i].brand;
+                        if(brand == 1)
+                            data.brand = "Apple";
+                        else if(brand == 2)
+                            data.brand = "Huawei";
+                        else if(brand == 3)
+                            data.brand = "MI";
+                        else if(brand == 4)
+                            data.brand = "Samsung";
+                        else
+                            data.brand = "Lenovo";
+                        data.goods_name = resBody[i].goods_name;
+                        data.status = resBody[i].details.order_status;
+                        data.details = resBody[i].details;
+                        tableData.push(data);
+                    }
+                }
+            }
+        });
+    }
+
+
+    let objData;
+    /*
+    Load table data
+     */
+    layui.use('table', function()
+    {
+        var table = layui.table;
+        table.render({
+            elem: '#demo'
+            ,toolbar: '#toolbar'
+            ,defaultToolbar: [
+                {
+                    title: 'Print'
+                    ,layEvent: 'LAYTABLE_PRINT'
+                    ,icon: 'layui-icon-print'
+                },
+                {
+                    title: 'Select'
+                    ,layEvent: 'LAYTABLE_COLS'
+                    ,icon: 'layui-icon-cols'
+                }]
+            ,cols: [[
+                {field: 'order_id', title: 'Order ID', width: 150, sort: true, align: 'center'}
+                ,{field: 'create_time', title: 'Date', width: 200, sort: true, align: 'center'}
+                ,{field: 'address', title: 'Address', minWidth: 200, align: 'center'}
+                ,{field: 'price', title: 'Cost', minWidth: 50, sort: true, align: 'center'}
+                ,{field: 'product_type', title: 'Product Type', width: 120, align: 'center'}
+                ,{field: 'brand', title: 'Brand', width: 100, align: 'center'}
+                ,{field: 'goods_name', title: 'Goods Name', width: 150, align: 'center'}
+                ,{field: 'right', title:'Operation', toolbar: '#barDemo', width:150, align: 'center'}
+            ]]
+            ,data: tableData
+            ,skin: 'line'
+            ,even: true
+            ,height: 532
+            ,page: true
+        });
+
+        /*
+        Table listener, handle row data
+        Including dynamically loading modal contents
+         */
+        table.on('tool(test)', function(obj){
+            objData = obj.data.details;
+            console.log(objData);
+            if(obj.event === 'show')
+            {
+                let colorCode = objData.color_id;
+                let color;
+                if(colorCode == '1')
+                    color = "Black";
+                else if(colorCode == '2')
+                    color = "White";
+                else if(colorCode == '3')
+                    color = "Silver";
+                else if(colorCode == '4')
+                    color = "Gold";
+                else if(colorCode == '5')
+                    color = "Blue";
+                else if(colorCode == '6')
+                    color = "Red";
+                else
+                    color = "Other Color";
+                let userEmail = objData.email;
+                let good_sn = objData.goods_sn;
+
+                let file = good_sn.substring(1, 2);
+                let filePath = "../media/Cart_Order/" + file.toString() + "/" + good_sn.toString() + ".png";
+                let images = $('#order_detail_content').children().children().children().children()[0];
+                images.src = filePath;
+
+                let mobileNumber = objData.mobilePhone;
+                let order_amount = objData.order_amount;
+                let order_status = obj.data.status;
+
+
+                if(order_status == 0)
+                {
+                    order_status = "Unfinished, click if product received";
+                    $('#order_confirm').html("Confirm");
+                    $('#order_confirm').attr("disabled", false);
+                }
+                else if(order_status == 1)
+                {
+                    order_status = "Order Finished"
+                    $('#order_confirm').html("Finished");
+                    $('#order_confirm').attr("disabled", "true");
+                }
+
+                $('#user_email').empty();
+                $('#user_phone').empty();
+                $('#order_color').empty();
+                $('#order_amount').empty();
+                $('#order_status').empty();
+
+                $('#user_email').html("Email:&nbsp;" + userEmail);
+                $('#user_phone').html("Phone:&nbsp;" + mobileNumber);
+                $('#order_color').html("Color:&nbsp;" + color);
+                $('#order_amount').html("Number:&nbsp;" + order_amount);
+                $('#order_status').html("Status:&nbsp;" + order_status);
+
+                $('#order_details_modal').modal('show');
+                $('#confirm_modal').modal('attach events', '#order_confirm');
+
+                //Load contents of modal
+                $('#confirm_modal').modal(
+                    {
+                        onApprove : function()
+                        {
+
+                            let submitData = {
+                                "email": userEmail,
+                                "order_id": obj.data.order_id.toString()
+                            };
+                            submitData = JSON.stringify(submitData);
+                            console.log(submitData);
+                            let urlMajor = jsonData.url_major + jsonData.confirmOrder;
+                            let urlAddition = jsonData.url_addition + jsonData.confirmOrder;
+                            let query = $.ajax({
+                                url: urlMajor,
+                                type: 'POST',
+                                data:submitData,
+                                dateType: "json",
+                                async: false,
+                                success: function (res,status,xhr)
+                                {
+                                    console.log(res)
+                                    obj.update
+                                    (
+                                        {
+                                            status: 1
+                                        }
+                                    );
+
+                                    layer.msg('The order is finished, thanks for purchasing', {
+                                        time: 5000,
+                                        btn: ['Understand']
+                                    });
+                                },
+                                fail: function(res)
+                                {
+                                    console.log(res + "fail");
+                                    layer.msg('Some Errors', {
+                                        time: 5000,
+                                        btn: ['Understand']
+                                    });
+                                },
+                                error: function(res)
+                                {
+                                    let queryAddition = $.ajax({
+                                        url: urlAddition,
+                                        type: 'POST',
+                                        data:submitData,
+                                        dateType: "json",
+                                        async: false,
+                                        success: function (res,status,xhr)
+                                        {
+                                            console.log(res)
+                                            obj.update
+                                            (
+                                                {
+                                                    status: 1
+                                                }
+                                            );
+
+                                            layer.msg('The order is finished, thanks for purchasing', {
+                                                time: 5000, //Auto close in 5 minutes
+                                                btn: ['Understand']
+                                            });
+                                        },
+                                        fail: function(res)
+                                        {
+                                            console.log(res + "fail");
+                                            layer.msg('Some Errors', {
+                                                time: 5000, //Auto close in 5 minutes
+                                                btn: ['Understand']
+                                            });
+                                        },
+                                        error: function ()
+                                        {
+                                            layer.msg('Some Errors', {
+                                                time: 5000, //Auto close in 5 minutes
+                                                btn: ['Understand']
+                                            });
+                                        }
+                                    });
+                                }
+
+                            });
+                        }
+                    });
+            }
+            else if(obj.event == 'confirm')
+            {
+                console.log(obj);
+                layer.msg('The order is finished, thanks for purchasing', {
+                    time: 5000,
+                    btn: ['Understand']
+                });
+            }
+            else if(obj.event === 'edit')
+            {
+                layer.prompt({
+                    formType: 2
+                    ,value: data.email
+                }, function(value, index){
+                    obj.update({
+                        email: value
+                    });
+                    layer.close(index);
+                });
+            }
+        });
+    });
+
+    /*
+    Export tables to Excel file
+     */
+    function exportTable()
+    {
+        let table = layui.table;
+        table.exportFile('demo', tableData, 'xls');
+    }
+</script>
+<style>
+    .footer
+    {
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 999;
+    }
+
+    body
+    {
+        background-image: url("../media/MainPage/background.png");
+        background-repeat:no-repeat;
+        background-attachment: fixed;
+        background-origin: border-box;
+        background-size:cover;
+    }
+
+</style>
+</html>

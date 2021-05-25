@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Change Profile</title>
+    <link rel="shortcut icon" href="../media/logos.ico"/>
+    <link rel="stylesheet" href="../assets/plugins/layui-v2.5.6/layui/layui.css" media="all">
+    <script src="../assets/plugins/layui-v2.5.6/layui/layui.js"></script>
+    <script type="text/javascript" src="../assets/plugins/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../assets/plugins/semantic/semantic.js"></script>
+    <link rel="stylesheet" type="text/css" href="../assets/plugins/semantic/semantic.css">
+    <!-- Standard Meta -->
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <!-- Site Properties -->
+
+    <script src="../assets/plugins/semantic/components/form.js"></script>
+    <script src="../assets/plugins/semantic/components/transition.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+    <script type="text/javascript" src="../js/MD5.js"></script>
+    <script type="text/javascript" src="../js/JumpBrandPage.js"></script>
+    <script type="text/javascript" src="../js/AllUrlsJson.js"></script>
+    <script type="text/javascript" src="../js/LoadMainPage.js"></script>
+    <script type="text/javascript" src="../js/ReadProperties.js"></script>
+    <script type="text/javascript" src="../js/AesFunction.js"></script>
+    <script src="../js/Concurrent.Thread.js"></script>
+
+
+
+    <style type="text/css">
+        p1 {
+            font-size: 20px;
+        }
+
+        .ui.footer.segment { /*footage style*/
+            margin: 5em 0em 0em;
+            padding: 5em 0em;
+        }
+
+        .ui.vertical.menu { /*menu style*/
+            float: right;
+            margin: 0em 3em 1em 0em;
+        }
+
+        .overlay {
+            float: right;
+
+        }
+
+        .overlay .vertical.menu { /*menu style*/
+            position: relative;
+            left: 0;
+
+        }
+
+        .overlay.fixed .vertical.menu { /*menu style*/
+            left: 235px;
+            top: 50px;
+        }
+
+        .se.column {
+            margin: 0em 10em 13em;
+        }
+
+        .sixteen.wide.column {
+            background-color: #000000;
+        }
+
+        .eight.wide.column {
+
+        }
+
+        .four.wide.column {
+
+        }
+
+        .hidden.menu {
+            display: none;
+        }
+
+        body {
+            /*background: rgb(185, 246, 246);*//*set background color*/
+            background-image: url("../media/MainPage/background.png"); /*set background image*/
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-origin: border-box;
+            background-size: cover;
+        }
+
+    </style>
+    <script type="text/javascript">
+        /*这里应当是上一个页面传进来的数据*/
+        var uname;
+        var ugender;
+        var uaddress;
+        var uphone;
+        var uemail;
+        var upass;
+        var safe = true;
+        var umoney;
+        var userinfo
+        var str = '';
+        var ap = '';
+        var sta = '';
+        var cou = '';
+        var newp;
+        var newname;
+        var new_add;
+
+        //*这里应当是上一个页面传进来的数据*==============================================================================
+        $(document)
+            .ready(function () {
+
+                $('.special.card .image').dimmer({
+                    on: 'hover'
+                });
+                $('.star.rating')
+                    .rating()
+                ;
+                $('.card .dimmer')
+                    .dimmer({
+                        on: 'hover'
+                    })
+                ;
+                $('.overlay.overlay')
+                    .visibility({
+                        type: 'fixed',
+                        offset: 15 // give some space from top of screen
+                    })
+                ;
+
+                $('.ui.radio.aa.checkbox')
+                    .checkbox({
+                        onChecked: function () {
+                            var newgen = "Male";
+
+                            Modify(uname, upass, newgen, uaddress, uphone, umoney);
+
+                            var test1 = JSON.parse(sessionStorage.getItem('userInfo'));
+
+                            test1.sex = newgen;
+
+                            sessionStorage.setItem('userInfo', JSON.stringify(test1));
+                            //-----------------------------------------------------0000000000000000000000000000000000000000000000000000000000000
+                            ugender = newgen;
+                        }
+                    });
+                $('.ui.radio.bb.checkbox')
+                    .checkbox({
+                        onChecked: function () {
+                            var newgen = "Female";
+
+                            Modify(uname, upass, newgen, uaddress, uphone, umoney);
+
+
+                            var test1 = JSON.parse(sessionStorage.getItem('userInfo'));
+
+                            test1.sex = newgen;
+
+                            sessionStorage.setItem('userInfo', JSON.stringify(test1));
+                            //-----------------------------------------------------0000000000000000000000000000000000000000000000000000000000000
+                            ugender = newgen;
+
+                        }
+                    });
+
+                $('.ui.header')
+                    .visibility({
+                        once: false,
+                        onBottomPassed: function () {
+                            $('.fixed.menu').transition('fade in');
+                        },
+                        onBottomPassedReverse: function () {
+                            $('.fixed.menu').transition('fade out');
+                        }
+                    })
+                ;
+
+                $('.selection.dropdown')
+                    .dropdown({
+                        clearable: true
+                    })
+                ;
+
+
+                $('.way.dropdown')
+                    .dropdown()
+                ;
+
+
+                /*滚动特效*/
+                $('.sixteen')
+                    .visibility({
+                        once: false,
+                        continuous: true,
+
+                        onPassing: function (calculations) {
+                            var oldColor = 'rgba(0, 0, 0, 1)';
+
+                            if (calculations.percentagePassed <= 0.2) {
+                                $(this)
+                                    .css('background-color', oldColor)
+                                ;
+                            } else {
+                                var per = calculations.percentagePassed;
+                                var r = 255 * (per - 0.2) * 3;
+                                var g = 255 * (per - 0.2) * 3;
+                                var b = 255 * (per - 0.2) * 3;
+
+                                var newColor = 'rgba(' + r + ',' + g + ',' + b + ', 1)';
+                                $(this)
+                                    .css('background-color', newColor)
+                                ;
+                            }
+                        }
+                    })
+                ;
+
+                userinfo = jQuery.parseJSON(sessionStorage.getItem('userInfo'));
+
+                umoney = userinfo.money;
+                uname = userinfo.userName;
+                uaddress = userinfo.address;
+                uphone = userinfo.phone;
+                ugender = userinfo.sex;
+                uemail = userinfo.email;
+                upass = userinfo.password;
+
+                document.getElementById('textfield').textContent = uemail;
+                document.getElementById('textfield2').textContent = uphone;
+                document.getElementById('username').textContent = uname;
+                document.getElementById('sex').textContent = ugender;
+                document.getElementById('address').textContent = uaddress;
+                document.getElementById('userid2').textContent = uname;
+                if (safe == true) {
+                    document.getElementById("notsafe").style.display = "none";
+                } else {
+                    document.getElementById("safe").style.display = "none";
+                }
+
+
+                if (ugender == "Male") {
+                    $('.ui.radio.aa.checkbox')
+                        .checkbox('set checked');
+                } else {
+                    $('.bb.checkbox').checkbox('set checked');
+                }
+
+                /*
+                Upload file
+                 */
+                let url = urlJson.url_major + urlJson.UserIconUpload + "?email=" + userinfo.email;
+                layui.use('upload', function () {
+                    let $ = layui.jquery
+                        , upload = layui.upload;
+                    let uploadInst = upload.render({
+                        elem: '#test1'
+                        , url: url
+                        , done: function (res) {
+                            if (res.code > 0)
+                                return layer.msg('Upload Unsuccessfully');
+                            else {
+
+                                Concurrent.Thread.create(function () {
+                                    function sleep(n) {
+                                        var start = new Date().getTime();
+                                        //console.log('休眠前：' + start);
+                                        while (true) {
+                                            if (new Date().getTime() - start > n) {
+                                                break;
+                                            }
+                                        }
+                                        // console.log('休眠后：' + new Date().getTime());
+                                    }
+
+                                    sleep(1000);
+                                    window.location.replace("ModifyUserInfo.html")
+
+                                });
+
+                                let iconPath = {
+                                    "hasIcon": "1",
+                                    "IconPath": urlJson.PictureDownload + "?email=" + jQuery.parseJSON(sessionStorage.getItem('userInfo')).email
+                                };
+                                sessionStorage.setItem('IconPath', JSON.stringify(iconPath));
+
+                                return layer.msg('Upload Successfully');
+                            }
+
+
+                        }
+                        , error: function () {
+                            var demoText = $('#demoText');
+                            demoText.html('<span style="color: #FF5722;">Upload Unsuccessfully</span> <a class="layui-btn layui-btn-xs demo-reload">Try Again</a>');
+                            demoText.find('.demo-reload').on('click', function () {
+                                uploadInst.upload();
+                            });
+                        }
+                    });
+                });
+                //----------------------------------------------------------------------------------
+                if(JSON.parse(sessionStorage.getItem('IconPath')).hasIcon == '1')
+                {
+                    $('#headimg1').attr('src', urlJson.url_major + urlJson.PictureDownload + "?email=" + jQuery.parseJSON(sessionStorage.getItem('userInfo')).email);
+                    $('#headimg2').attr('src', urlJson.url_major + urlJson.PictureDownload + "?email=" + jQuery.parseJSON(sessionStorage.getItem('userInfo')).email);
+                }
+                else
+                {
+                    var gs = "default_male.png";
+                    if (userinfo.sex != "Male") {
+                        gs = "default_female.png"
+                    }
+
+                    $('#headimg1').attr('src', '../media/UserIcon/Default/' + gs);
+                    $('#headimg2').attr('src', '../media/UserIcon/Default/' + gs);
+                }
+
+            });
+
+        function subadd() {
+            if (document.getElementById('streetaddress').value == '') {
+                alert("empty street address");
+            }
+            if (document.getElementById('aptnumber').value == '') {
+                alert("empty apt number");
+            }
+            if (document.getElementById('country').value == '') {
+                alert("empty country");
+            }
+            if ($("#state").val() == '') {
+                alert("empty state");
+            }
+            if (document.getElementById('streetaddress').value != '' && document.getElementById('aptnumber').value != '' && document.getElementById('country').value != '' && $("#state").val() != '') {
+                str = document.getElementById('streetaddress').value;
+                ap = document.getElementById('aptnumber').value;
+                sta = $("#state").val();
+                cou = document.getElementById('country').value;
+                new_add = str + ', ' + ap + ', ' + sta + ', ' + cou;
+
+                document.getElementById('ad').textContent = new_add;
+                $('.ui.basic.test.modal')
+                    .modal('show')
+                ;
+            }
+        }
+
+        /*修改信息函数*/
+        function modifyname() {
+            Modify(newname, upass, ugender, uaddress, uphone, umoney);
+            var test1 = JSON.parse(sessionStorage.getItem('userInfo'));
+
+            test1.userName = newname;
+
+            sessionStorage.setItem('userInfo', JSON.stringify(test1));
+            //-----------------------------------------------------0000000000000000000000000000000000000000000000000000000000000
+            document.getElementById('username').textContent = newname;
+            uname = newname;
+
+        }
+
+        function modifyaddress() {
+            Modify(uname, upass, ugender, new_add, uphone, umoney);
+
+
+            var test1 = JSON.parse(sessionStorage.getItem('userInfo'));
+
+            test1.address = new_add;
+
+            sessionStorage.setItem('userInfo', JSON.stringify(test1));
+
+            //-----------------------------------------------------0000000000000000000000000000000000000000000000000000000000000
+            document.getElementById('address').textContent = new_add;
+            uaddress = new_add;
+
+
+        }
+
+        function modifyphone() {
+            Modify(uname, upass, ugender, uaddress, newp, umoney);
+
+            var test1 = JSON.parse(sessionStorage.getItem('userInfo'));
+
+            test1.phone = newp;
+
+            sessionStorage.setItem('userInfo', JSON.stringify(test1));
+            //-----------------------------------------------------0000000000000000000000000000000000000000000000000000000000000
+            document.getElementById('textfield2').textContent = newp;
+            uphone = newp;
+
+        }
+
+        function modifypassword() {
+            let password = hex_md5(document.getElementById('vrfoldpas').value);
+            queryService(password);
+        }
+
+        /*检查输入的新用户名是否合法*/
+        function namechange() {
+            if (document.getElementById('setnewname').value.length < 3) {
+                document.getElementById('alertname').textContent = "Need a longer name";
+            } else {
+                newname = document.getElementById('setnewname').value;
+                document.getElementById('nn').textContent = newname;
+                //document.getElementById('userid').textContent = newname;
+                document.getElementById('userid2').textContent = newname;
+                $('.ui.basic.name.modal')
+                    .modal('show')
+                ;
+                document.getElementById('alertname').textContent = "More than three letters";
+                document.getElementById('setnewname').value = '';
+            }
+        }
+
+        <!--verify old password-------------------------------------------------------------------------------------------------->
+        function queryService(password) {
+
+            userEmail = encryptOneString(uemail, aseKey, iv);
+            password1 = encryptOneString(password, aseKey, iv);
+
+            let jsonObject = {
+                "email": userEmail,
+                "password": password1
+            };
+
+            jsonObjects = JSON.stringify(jsonObject);
+
+            var url_major1 = urlJson.url_major + urlJson.login;
+            var url_major2 = urlJson.url_addition + urlJson.login;
+
+
+            let query = $.ajax({
+                url: url_major1,
+                type: 'POST',
+                data: jsonObjects,
+                timeout: 2000,
+                dateType: "json",
+                async: false,
+                success: function (res, status, xhr) {
+                    let response = JSON.parse(res);
+                    if (xhr.status == 200) {
+                        let response = jQuery.parseJSON(res);
+
+                        if (response.status == '00') {
+                            $('.ui.pass.modal')
+                                .modal('show')
+                                .modal('setting', 'closable', false)
+                            ;
+                        } else if (response.status == '02') {
+                            $('#invalid_account')
+                                .modal('show')
+                                .modal('setting', 'closable', false);
+                        } else if (response.status == '03') {
+                            $('#wrongold')
+                                .modal('show')
+                                .modal('setting', 'closable', false);
+                        }
+                        //console.log(getCode);
+                    }
+                },
+                fail: function (res) {
+                    console.log(res)
+                },
+                error: function (res) {
+                    let queryAddition = $.ajax({
+                        url: url_major2,
+                        type: 'POST',
+                        data: jsonObjects,
+                        dateType: "json",
+                        async: false,
+                        success: function (res, status, xhr) {
+                            let response = JSON.parse(res);
+                            //console.log("Hello World!")
+                            if (xhr.status == 200) {
+                                let response = jQuery.parseJSON(res);
+
+                                if (response.status == '00') {
+                                    $('.ui.pass.modal')
+                                        .modal('show')
+                                        .modal('setting', 'closable', false)
+                                    ;
+                                } else if (response.status == '02') {
+                                    $('#invalid_account')
+                                        .modal('show')
+                                        .modal('setting', 'closable', false);
+                                } else if (response.status == '03') {
+                                    $('#wrongold')
+                                        .modal('show')
+                                        .modal('setting', 'closable', false);
+                                }
+                                //console.log(getCode);
+                            }
+                        },
+                        fail: function (res) {
+                            $('#error_modal')
+                                .modal('show');
+                        },
+                        error: function (res) {
+                            $('#error_modal')
+                                .modal('show');
+                        }
+                    });
+                },
+                complete: function (XMLHttpRequest, status) {
+                    console.log(status);
+                    if (status == 'timeout') {
+                        query.abort();
+                        alert("Time out!");
+                    }
+                }
+            });
+        }
+
+        <!--verify old password-------------------------------------------------------------------------------------------------->
+
+        function charge() {
+            var mon = $("#pm").val();
+            if (mon == "") {
+                $('.selectpay.modal')
+                    .modal('show')
+                    .modal('setting', 'closable', false)
+                ;
+            } else {
+                if (umoney != '') {
+
+                    var money1 = parseInt(document.getElementById('moneyinput').value) + parseInt(umoney);
+                    Modify(uname, upass, ugender, uaddress, uphone, money1);
+
+                    //更新userinfo================================================================================================================================
+                    var test1 = JSON.parse(sessionStorage.getItem('userInfo'));
+                    test1.money = String(parseInt(document.getElementById('moneyinput').value) + parseInt(umoney));
+
+                    sessionStorage.setItem('userInfo', JSON.stringify(test1));
+
+                    var moneychanged = JSON.parse(sessionStorage.getItem('userInfo'));
+                    umoney = moneychanged.money;
+
+                } else {
+                    alert("2");
+                    var money1 = document.getElementById('moneyinput').value;
+                    Modify(uname, upass, ugender, uaddress, uphone, money1);
+                }
+            }
+        }
+
+        /*发送修改的信息*/
+        function Modify(usern, password, gender, add, phone, money) {
+
+            let jsonObjects = {
+                "email": userinfo.email,
+                "userName": usern,
+                "password": password,
+                "address": add,
+                "money": money,
+                "sex": gender,
+                "phone": phone,
+            };
+
+            jsonObjectk = JSON.stringify(jsonObjects);
+
+            var url_major1 = urlJson.url_major + urlJson.ModifyUserInfo;
+            var url_major2 = urlJson.url_addition + urlJson.ModifyUserInfo;
+
+            let query = $.ajax({
+                url: url_major1,
+                type: 'POST',
+                data: jsonObjectk,
+                timeout: 2000,
+                dateType: "json",
+                async: false,
+                success: function (res, status, xhr) {
+                    let response = JSON.parse(res);
+                    if (xhr.status == 200) {
+                        if (response.status == '00') {
+                            $('.ui.basic.modsuc.modal')
+                                .modal('show')
+                                .modal('setting', 'closable', false)
+                            ;
+                        } else if (response.status == '01') {
+                            $('.ui.basic.modunsuc.modal')
+                                .modal('show')
+                                .modal('setting', 'closable', false)
+                            ;
+                        }
+                    }
+                },
+                fail: function (res) {
+                    console.log(res)
+                },
+                error: function (res) {
+                    let queryAddition = $.ajax({
+                        url: url_major2,
+                        type: 'POST',
+                        data: jsonObjectk,
+                        dateType: "json",
+                        async: false,
+                        success: function (res, status, xhr) {
+                            let response = JSON.parse(res);
+                            //console.log("Hello World!")
+                            if (xhr.status == 200) {
+                                if (response.status == '00') {
+                                    $('.ui.basic.modsuc.modal')
+                                        .modal('show')
+                                        .modal('setting', 'closable', false)
+                                    ;
+                                } else if (response.status == '01') {
+                                    $('.ui.basic.modunsuc.modal')
+                                        .modal('show')
+                                        .modal('setting', 'closable', false)
+                                    ;
+                                }
+                            }
+                        },
+                        fail: function (res) {
+                            $('#error_modal')
+                                .modal('show')
+                                .modal('setting', 'closable', false);
+                        },
+                        error: function (res) {
+                            $('#error_modal')
+                                .modal('show')
+                                .modal('setting', 'closable', false);
+                        }
+                    });
+                },
+                complete: function (XMLHttpRequest, status) {
+                    console.log(status);
+                    if (status == 'timeout') {
+                        query.abort();
+                        alert("Time out!");
+                    }
+                }
+            });
+
+        }
+
+        /*检查输入的手机号是否合法*/
+        function phonechange() {
+
+            if (document.getElementById('setnewphone').value.length != 11) {
+                document.getElementById('alerphone').textContent = "Need 11 Digits";
+            } else {
+                newp = document.getElementById('setnewphone').value;
+                document.getElementById('ph').textContent = newp;
+                $('.ui.basic.phone.modal')
+                    .modal('show')
+                ;
+                document.getElementById('alertname').textContent = "11 Digits";
+                document.getElementById('setnewphone').value = '';
+            }
+        }
+
+        /*检查输入的新密码是否合法，若合法则发送新密码*/
+        function subnewpass() {
+            $('.ui.pa.form')
+                // adding longform
+                .form({
+                        password1: {
+                            identifier: 'password1',
+                            rules: [
+                                {
+                                    type: 'empty',
+                                    prompt: 'Please enter your password'
+                                },
+                                {
+                                    type: 'length[6]',
+                                    prompt: 'Your password must be at least 6 characters'
+                                }
+                            ]
+                        },
+                        password2: {
+                            identifier: 'password2',
+                            rules: [
+                                {
+                                    type: 'empty',
+                                    prompt: 'Please enter your password again'
+                                },
+                                {
+                                    type: 'match[password1]',
+                                    prompt: 'Two passwords must the same'
+                                }
+                            ]
+                        },
+                    }
+                )
+
+            if ($('.ui.pa.form').form('is valid', 'password2')) {
+                Modify(uname, hex_md5($('.ui.pa.form').form('get value', 'password2')), ugender, uaddress, uphone, umoney);
+
+                var test1 = JSON.parse(sessionStorage.getItem('userInfo'));
+                test1.password = hex_md5($('.ui.pa.form').form('get value', 'password2'));
+
+                sessionStorage.setItem('userInfo', JSON.stringify(test1));
+
+                upass = hex_md5($('.ui.pa.form').form('get value', 'password2'));
+
+            }
+        }
+
+        /*清空密码输入框*/
+        function clearpass() {
+            $('.ui.pa.form')
+                .form('remove fields', ['password1', 'password2'])
+            ;
+        }
+
+    </script>
+
+</head>
+
+<body>
+
+<div class="ui grid">
+    <div class="sixteen wide column">
+        <!-- Following Menu -->
+
+
+        <div class="ui large secondary inverted pointing menu">
+            <div class="left item">
+                <img src="../media/logos.ico">
+                <h>&ensp;&ensp;</h>
+
+                <a class="item" onclick="window.location.href='MainPage.html'">
+                    <i class="globe icon"></i>
+                    Main Page</a>
+
+                <a class="item" onclick="window.location.href='ShopCart.html'">
+                    <i class="cart icon"></i>
+                    Shopping Cart</a>
+
+                <a class="item" onclick="window.location.href='OrderList.html'">
+                    <i class="file alternate icon"></i>
+                    Order List</a>
+
+                <a class="item" onclick="window.location.href='Administrator.html'">
+                    <i class="user secret icon"></i>
+                    Adminstrator</a>
+
+            </div>
+            <div class="right item">
+                <img class="ui avatar image" id="headimg1" src="">
+                <h>&ensp;&ensp;</h>
+                <a class="item" id="userid2"> </a>
+                <h>&ensp;&ensp;</h>
+                <a class="ui inverted button" onclick="window.location.href='Login.html'">Log Out</a>
+
+            </div>
+        </div>
+
+
+        <h3 class="ui header" style="margin: 2.5em;color: #FFFFF0">G4 E-Product Shopping Platform</h3>
+
+
+        <h1 class="ui header" style="text-align: center;color: #FFFFF0;font-size: 3em">Modification On Personal
+            Information</h1>
+        <br/>
+    </div>
+
+    <div class="four wide column">
+        <!--Menu------------------------------------------------------------------------------------------------------- -->
+        <div class="overlay">
+            <div class="ui vertical menu">
+                <div class="item">
+                    <div class="header">Profile</div>
+                    <div class="ui bulleted link list">
+                        <a href="#Por" class="item">Portrait</a>
+                        <a href="#uname" class="item">Name</a>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="header">Address</div>
+                    <div class="ui bulleted link list">
+                        <a class="item" href="#ca">Change Address</a>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="header">Contacts</div>
+                    <div class="ui bulleted link list">
+                        <a class="item" href="#em">Email</a>
+
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="header">Password</div>
+                    <div class="ui bulleted link list">
+                        <a class="item" href="#pa">Reset password</a>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    <div class="eight wide column">
+
+        <!--right content---------------------------------------------------------------------------------------------- -->
+        <div class="ui raised very padded segment">
+            <h1 class="ui header" id="Por">Profile</h1>
+            <div class="ui divider"></div>
+            <!--card---------------------------------------------------------------------------------------------- -->
+
+            <h3 style="margin-left: 1.5em"> Portrait</h3>
+            <div class="ui centered card">
+                <div class="blurring dimmable image">
+                    <div class="ui dimmer">
+                        <div class="content">
+                            <div class="center">
+                                <div class="layui-upload">
+                                    <button type="button" class="layui-btn" id="test1">Upload Icon</button>
+                                    <div class="layui-upload-list">
+                                        <img class="layui-upload-img" id="demo1">
+                                        <p id="demoText"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <img id="headimg2" src="../media/phone.png">
+                </div>
+                <div class="ui bottom right attached label" id="sex"></div>
+            </div>
+            <div class="ui divider"></div>
+
+
+            <div style="margin-left: 1.5em">
+                <h3 id="uname"> User Name</h3>
+                <p id="username" style="text-align: center; font-size: 1.5em"></p>
+            </div>
+
+            <br/>
+            <br/>
+
+            <div class="ui raised very padded segment">
+                <div style="margin-left: 1.5em">
+                    <h2 id="cuname"> Change User Name</h2>
+                    <div class="ui  right labeled action input">
+                        <div class="ui label">
+                            <p id="alertname"> More than three letters</p>
+
+                        </div>
+                        <input type="text" id="setnewname" placeholder="New Username">
+                        <button class="ui button" onclick='namechange()'>Set</button>
+                    </div>
+                </div>
+
+                <br/>
+                <br/>
+
+                <div class="ui form" style="margin-left: 1.5em">
+                    <div class="inline fields">
+                        <label>Set your gender</label>
+
+
+                        <div class="field">
+                            <div class="ui radio aa checkbox">
+                                <input type="radio" name="frequency">
+                                <label>Male</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui radio bb checkbox">
+                                <input type="radio" name="frequency">
+                                <label>Female</label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-------------add money----------------------------------------------------------------------------------------------------->
+
+            <div class="ui raised very padded segment">
+                <div style="margin-left: 1.5em">
+                    <h2>Recharge your account</h2>
+
+
+                    <select class="ui selection way dropdown" id="pm">
+                        <option value="">Payment Method</option>
+                        <option value="Visa Card">Visa Card</option>
+                        <option value="Mastercard">Mastercard</option>
+                        <option value="American Express">American Express</option>
+                        <option value="Union Pay">Union Pay</option>
+                        <option value="Wechat">Wechat</option>
+                        <option value="AliPay">AliPay</option>
+                    </select>
+
+
+                    <div class="ui action input">
+                        <input type="text" placeholder="How much to charge" id="moneyinput">
+                        <button class="ui teal right labeled icon button" onclick="charge()">
+                            <i class="pound sign icon"></i>
+                            Charge
+                        </button>
+                    </div>
+
+                </div>
+
+                <br/>
+                <br/>
+
+            </div>
+            <!------------------------------------------------------------------------------------------------------------------>
+
+
+        </div>
+        <div class="ui divider"></div>
+        <div class="ui raised very padded segment">
+            <h1 class="ui header" id="ca">Address</h1>
+
+            <div style="margin-left: 1.5em">
+                <h style="font-size: 1.5em"> Registered Address:</h>
+                <br/>
+                <br/>
+                <p id="address" style="font-size: 2em"></p>
+            </div>
+
+            <div class="ui divider"></div>
+
+            <div class="ui raised very padded segment">
+
+                <h2 class="ui header">Change Address</h2>
+                <form class="ui form">
+                    <h4 class="ui dividing header">Address Information</h4>
+
+                    <div class="field">
+                        <label>Deliver Address</label>
+                        <div class="fields">
+                            <div class="twelve wide field">
+                                <input type="text" name="shipping[address]" placeholder="Street Address"
+                                       id="streetaddress">
+                            </div>
+                            <div class="four wide field">
+                                <input type="text" name="shipping[address-2]" placeholder="Apt #" id="aptnumber">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="two fields">
+                        <div class="field">
+                            <label>State</label>
+                            <select class="ui fluid dropdown" id="state">
+                                <option value="">State</option>
+                                <option value="England">England</option>
+                                <option value="Scotland">Scotland</option>
+                                <option value="Whales">Whales</option>
+                                <option value="Northern Ireland">Northern Ireland</option>
+
+
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label>Country</label>
+                            <div class="ui fluid search selection dropdown">
+                                <input type="hidden" name="country" id="country">
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Select Country</div>
+                                <div class="menu">
+                                    <div class="item" data-value="Australia"><i class="au flag"></i>Australia</div>
+                                    <div class="item" data-value="Canada"><i class="ca flag"></i>Canada</div>
+                                    <div class="item" data-value="China"><i class="cn flag"></i>China</div>
+                                    <div class="item" data-value="Ireland"><i class="ie flag"></i>Ireland</div>
+                                    <div class="item" data-value="il"><i class="il flag"></i>Israel</div>
+                                    <div class="item" data-value="Italy"><i class="it flag"></i>Italy</div>
+                                    <div class="item" data-value="Japan"><i class="jp flag"></i>Japan</div>
+                                    <div class="item" data-value="Mexico"><i class="mx flag"></i>Mexico</div>
+                                    <div class="item" data-value="New Zealand"><i class="nz flag"></i>New Zealand</div>
+                                    <div class="item" data-value="Russia"><i class="ru flag"></i>Russia</div>
+                                    <div class="item" data-value="United Arab Emirates"><i class="ae flag"></i>United
+                                        Arab Emirates
+                                    </div>
+                                    <div class="item" data-value="United Kingdom"><i class="uk flag"></i>United Kingdom
+                                    </div>
+                                    <div class="item" data-value="United States"><i class="us flag"></i>United States
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="ui button" tabindex="0" onclick='subadd()'>Submit New Address</div>
+                </form>
+            </div>
+            <!--warning=============================================================================================-->
+
+        </div>
+
+
+        <!--Pop up to change name ===================================================================================-->
+        <div class="ui basic name modal">
+
+            <p id="nn" style="font-size: 3em ; text-align: center"></p>
+
+            <div class="content">
+                <p style="font-size: 2.5em; text-align: center">Are you sure to set your name as this?</p>
+            </div>
+            <div class="actions">
+                <div class="ui red basic cancel inverted button">
+                    <i class="remove icon"></i>
+                    No
+                </div>
+                <div class="ui green ok inverted button" onclick='modifyname()'>
+                    <i class="checkmark icon"></i>
+                    Yes
+                </div>
+            </div>
+        </div>
+
+        <!--Pop up to change address ================================================================================-->
+        <div class="ui basic test modal">
+
+            <p id="ad" style="font-size: 3em ; text-align: center"></p>
+
+            <div class="content">
+                <p style="font-size: 2.5em; text-align: center">Please check your new address!</p>
+            </div>
+            <div class="actions">
+                <div class="ui red basic cancel inverted button">
+                    <i class="remove icon"></i>
+                    No
+                </div>
+                <div class="ui green ok inverted button" onclick='modifyaddress()'>
+                    <i class="checkmark icon"></i>
+                    Yes
+                </div>
+            </div>
+        </div>
+        <!--Pop up to change phone ===================================================================================-->
+        <div class="ui basic phone modal">
+
+            <p id="ph" style="font-size: 3em"></p>
+
+            <div class="content">
+                <p style="font-size: 2.5em; text-align: center">Please check your new Number!</p>
+            </div>
+            <div class="actions">
+                <div class="ui red basic cancel inverted button">
+                    <i class="remove icon"></i>
+                    No
+                </div>
+                <div class="ui green ok inverted button" onclick="modifyphone()">
+                    <i class="checkmark icon"></i>
+                    Yes
+                </div>
+            </div>
+        </div>
+        <!--Error mod=================================================================================================-->
+        <div class="ui success mini modal" id="error_modal">
+
+            <div class="content">
+                <p>Some Error!</p>
+                <p>Please try again later</p>
+            </div>
+            <div class="actions">
+                <div class="ui negative right labeled icon red button">
+                    OK
+                    <i class="checkmark icon"></i>
+                </div>
+            </div>
+        </div>
+        <!--wrong old pas=================================================================================================-->
+        <div class="ui success mini modal" id="wrongold">
+            <div class="header">
+                <i class="exclamation icon"></i>
+                Message
+            </div>
+            <div class="content">
+                <p>Password incorrect!</p>
+                <p>Please try again</p>
+            </div>
+            <div class="actions">
+                <div class="ui negative right labeled icon red button">
+                    OK
+                    <i class="checkmark icon"></i>
+                </div>
+            </div>
+        </div>
+        <!--Modify successful ===================================================================================-->
+        <div class="ui basic modsuc modal">
+
+            <p style="font-size: 3em; text-align: center"> Modify successful</p>
+
+            <div class="content">
+                <p style="font-size: 2.5em; text-align: center"></p>
+            </div>
+            <div class="actions">
+                <div class="ui green ok inverted button">
+                    <i class="checkmark icon"></i>
+                    Yes
+                </div>
+            </div>
+        </div>
+        <!--Modify pass success ===================================================================================-->
+        <div class="ui pass modal">
+            <i class="close icon"></i>
+            <div class="header">
+                Modify your password
+            </div>
+
+            <form class="ui pa form segment">
+                <div class="two fields">
+                    <div class="field">
+                        <label>Password</label>
+                        <input type="password" name="password1">
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="field">
+                        <label>Confirm Password</label>
+                        <input type="password" name="password2">
+                    </div>
+                </div>
+
+
+                <div class="ui primary submit button" onclick="subnewpass()">Submit</div>
+                <div class="ui clear button" onclick="clearpass()">Clear</div>
+                <div class="ui error message"></div>
+            </form>
+
+        </div>
+        <!--Modify unsuccessful ===================================================================================-->
+        <div class="ui basic modunsuc modal">
+
+            <p style="font-size: 3em"> Modify unsuccessful</p>
+
+            <div class="content">
+                <p style="font-size: 2.5em; text-align: center"></p>
+            </div>
+            <div class="actions">
+                <div class="ui green ok inverted button">
+                    <i class="checkmark icon"></i>
+                    OK
+                </div>
+            </div>
+        </div>
+        <!--please select a payment method===================================================================================-->
+        <div class="ui basic selectpay modal">
+
+            <p style="font-size: 3em">please select a payment method!</p>
+
+            <div class="content">
+                <p style="font-size: 2.5em; text-align: center"></p>
+            </div>
+            <div class="actions">
+                <div class="ui green ok inverted button">
+                    <i class="checkmark icon"></i>
+                    OK
+                </div>
+            </div>
+        </div>
+        <!--end of card=============================================================================================-->
+        <div class="ui divider"></div>
+        <div class="ui raised very padded segment">
+            <h1 class="ui header" id="em">Contacts</h1>
+
+            <div style="margin-left: 1.5em">
+                <h style="font-size: 1.5em"> Registered Email:</h>
+                <br/>
+                <br/>
+                <p id="textfield" style="font-size: 2em"></p>
+            </div>
+            <br/>
+            <br/>
+            <div style="margin-left: 1.5em">
+                <h style="font-size: 1.5em"> Phone number:</h>
+                <br/>
+                <br/>
+                <p id="textfield2" style="font-size: 2em"></p>
+            </div>
+
+            <div class="ui raised very padded segment">
+                <div style="margin-left: 1.5em">
+                    <h2 id="cpnumber"> Change Phone number</h2>
+                    <div class="ui  right labeled action input">
+                        <div class="ui label">
+                            <p id="alerphone"> 11 digits</p>
+
+                        </div>
+                        <input type="text" id="setnewphone" placeholder="New number">
+                        <button class="ui button" onclick='phonechange()'>Set</button>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <!--end of card=============================================================================================-->
+        <div class="ui divider"></div>
+        <div class="ui raised very padded segment">
+            <h1 class="ui header" id="pa">Password</h1>
+
+            <!--warning=============================================================================================-->
+            <div class="ui negative message cc_cursor" id="notsafe">
+                <i class="close icon"></i>
+                <div class="header">
+                    Your password is not safe enough
+                </div>
+                <p>We suggest to change your password
+                </p>
+            </div>
+            <div class="ui success message" id="safe">
+                <i class="close icon"></i>
+                <div class="header">
+                    You have a safe password.
+                </div>
+                <p>You don't have to change your password</p>
+            </div>
+            <!--warning=============================================================================================-->
+            <h2 class="ui header">Set new Password</h2>
+            <div class="ui action input">
+                <input type="password" placeholder="Original password" id="vrfoldpas">
+                <button class="ui button" onclick='modifypassword()'>Verify</button>
+            </div>
+        </div>
+
+    </div>
+    <div class="four wide column">
+
+    </div>
+</div>
+
+<div class="ui vertical footer segment">
+    <div class="ui center aligned container">
+        <div class="ui horizontal small divided link list">
+            <a class="item"><img src="../media/logos.ico" class="ui centered mini image"></a>
+            <a class="item" href="#" onclick="window.location.href='homepage.html'">
+                <strong style="color: black">About Us</strong>
+            </a>
+            <a class="item" href="#">
+                <strong style="color: black" onclick="window.location.href='UseragreementsUnique.html'">Privacy
+                    Policy</strong>
+            </a>
+        </div>
+        <div>
+            &nbsp©&nbsp Copyright 2020 DS Group 4
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

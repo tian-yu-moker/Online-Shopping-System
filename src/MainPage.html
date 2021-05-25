@@ -1,0 +1,1090 @@
+<!--
+@Author: Tian Yu 17722024
+@Time: 2020.10.16
+-->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>MainFrame</title>
+    <link rel="shortcut icon" href="../media/logos.ico" />
+    <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+    <meta HTTP-EQUIV="Cache-Control" CONTENT="no-store, must-revalidate">
+    <meta HTTP-EQUIV="expires" CONTENT="Wed, 26 Feb 1997 08:21:57 GMT">
+    <meta HTTP-EQUIV="expires" CONTENT="0">
+    <link rel="stylesheet" href="../assets/plugins/layui-v2.5.6/layui/layui.css" media="all">
+    <script src="../assets/plugins/layui-v2.5.6/layui/layui.js"></script>
+    <script type="text/javascript" src="../assets/plugins/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../assets/plugins/semantic/semantic.js"></script>
+    <link rel="stylesheet" type="text/css" href="../assets/plugins/semantic/semantic.css">
+    <script type="text/javascript" src="../js/JumpBrandPage.js"></script>
+    <script type="text/javascript" src="../js/AllUrlsJson.js"></script>
+    <script type="text/javascript" src="../js/LoadMainPage.js"></script>
+</head>
+<body id="tests">
+<div class="ui top inverted menu">
+    <div class="ui item">
+        <img src="../media/logos.ico">
+    </div>
+    <a class="item" href="MainPage.html">
+        <i class="globe icon"></i>
+        Main Page
+    </a>
+    <a class="item" href="ShopCart.html">
+        <i class="cart icon"></i>
+        Shopping Cart
+    </a>
+    <a class="item" href="OrderList.html">
+        <i class="file alternate icon"></i>
+        Order List
+    </a>
+    <a class="item" href="Administrator.html">
+        <i class="user secret icon"></i>
+        Administrator
+    </a>
+    <div class="right menu">
+        <div class="item">
+            <img class="ui avatar image" id="user_header_menu_icon" src="">
+            <a class="text" id="user_menu_name" href="ModifyUserInfo.html"></a>
+        </div>
+        <a class="item" href="Login.html">
+            <i class="logout icon"></i>
+            Logout
+        </a>
+    </div>
+</div>
+
+<div class="ui fluid container">
+    <div class="ui equal width grid">
+        <div class="column">
+        </div>
+        <div class="ten wide column">
+            <div class="ui huge text menu">
+                <div class="item">
+                    <img src="../media/logos.ico">
+                </div>
+                <a class="item" id="laptop_header_menu" onclick="categoryMenuListener(this)">
+                    <strong>
+                        <i class="laptop icon"></i>
+                        Laptops
+                    </strong>
+                </a>
+                <a class="item"  id="mobile_header_menu" onclick="categoryMenuListener(this)">
+                    <strong>
+                        <i class="mobile alternate icon"></i>
+                        Mobile Phones
+                    </strong>
+                </a>
+                <a class="item" id="tablet_header_menu" onclick="categoryMenuListener(this)">
+                    <strong>
+                        <i class="tablet alternate icon"></i>
+                        Tablets
+                    </strong>
+                </a>
+                <a class="item" id="earphone_header_menu" onclick="categoryMenuListener(this)">
+                    <strong>
+                        <i class="headphones icon"></i>
+                        Earphones
+                    </strong>
+                </a>
+                <a class="item" id="others_header_menu" onclick="categoryMenuListener(this)">
+                    <strong>
+                        <i class="plug icon"></i>
+                        Others
+                    </strong>
+                </a>
+                <div class="right menu">
+                    <div class="item">
+                        <div class="ui fluid search">
+                            <div class="ui icon input">
+                                <input class="prompt" type="text" name="header_search" placeholder="Search products...">
+                                <i class="inverted circular search link icon" onclick="headerSearch()"></i>
+                            </div>
+                            <div class="results"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <!--Image carousel -->
+            <div class="layui-carousel" id="header_carousel">
+                <div carousel-item>
+                    <div><img src="../media/MainPage/Header_carousel/1.png"></div>
+                    <div><img src="../media/MainPage/Header_carousel/2.png"></div>
+                    <div><img src="../media/MainPage/Header_carousel/3.png"></div>
+                    <div><img src="../media/MainPage/Header_carousel/4.png"></div>
+                    <div><img src="../media/MainPage/Header_carousel/5.png"></div>
+                </div>
+            </div>
+            <br>
+            <!--Header cards-->
+            <div class="ui special five cards">
+                <div class="headers_top blurring dimmable card" id="laptop_header_card" onmouseover="card_animation(this)" onmouseleave="onRemove()">
+                    <div class="ui dimmer">
+                        <div class="content">
+                            <div class="center">
+                                <strong>Find products for Apple</strong>
+                                <p></p>
+                                <p></p>
+                                <div class="ui secondary button" id="Apple_Page" onclick="changePage(this)">Trade More</div>
+                                <p></p>
+                                <a style="color: #FFFFFF" href="https://www.apple.com">
+                                    <i class="globe icon"></i>
+                                    Official Website
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="image">
+                        <img src="../media/MainPage/Header_cards/1.png">
+                    </div>
+                </div>
+                <div class="headers_top blurring dimmable card" id="mobile_header_card" onmouseover="card_animation(this)" onmouseleave="onRemove()">
+                    <div class="ui dimmer">
+                        <div class="content">
+                            <div class="center">
+                                <strong>Find products for Huawei</strong>
+                                <p></p>
+                                <p></p>
+                                <div class="ui secondary button" id="Huawei_Page" onclick="changePage(this)">Trade More</div>
+                                <p></p>
+                                <a style="color: #FFFFFF" href="https://consumer.huawei.com/en/">
+                                    <i class="globe icon"></i>
+                                    Official Website
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="image">
+                        <img src="../media/MainPage/Header_cards/2.png">
+                    </div>
+                </div>
+
+                <div class="headers_top blurring dimmable card" id="tablet_header_card" onmouseover="card_animation(this)" onmouseleave="onRemove()">
+                    <div class="ui dimmer">
+                        <div class="content">
+                            <div class="center">
+                                <strong>Find products for Xiaomi</strong>
+                                <p></p>
+                                <p></p>
+                                <div class="ui secondary button" id="MI_Page" onclick="changePage(this)">Trade More</div>
+                                <p></p>
+                                <a style="color: #FFFFFF" href="https://www.mi.com/global/">
+                                    <i class="globe icon"></i>
+                                    Official Website
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="image">
+                        <img src="../media/MainPage/Header_cards/3.png">
+                    </div>
+                </div>
+
+                <div class="headers_top blurring dimmable card" id="earphone_header_card" onmouseover="card_animation(this)" onmouseleave="onRemove()">
+                    <div class="ui dimmer">
+                        <div class="content">
+                            <div class="center">
+                                <strong>Find products for Lenovo</strong>
+                                <p></p>
+                                <p></p>
+                                <div class="ui secondary button" id="Lenovo_Page" onclick="changePage(this)">Trade More</div>
+                                <p></p>
+                                <a style="color: #FFFFFF" href="https://www.lenovo.com/gb/en">
+                                    <i class="globe icon"></i>
+                                    Official Website
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="image">
+                        <img src="../media/MainPage/Header_cards/4.png">
+                    </div>
+                </div>
+
+                <div class="headers_top blurring dimmable card" id="others_header_card" onmouseover="card_animation(this)" onmouseleave="onRemove()">
+                    <div class="ui dimmer">
+                        <div class="content">
+                            <div class="center">
+                                <strong>Find products for Samsung</strong>
+                                <p></p>
+                                <p></p>
+                                <div class="ui secondary button" id="Samsung_Page" onclick="changePage(this)">Trade More</div>
+                                <p></p>
+                                <a style="color: #FFFFFF" href="https://www.samsung.com/en">
+                                    <i class="globe icon"></i>
+                                    Official Website
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="image" id="images_others">
+                        <img src="../media/MainPage/Header_cards/5.png">
+                    </div>
+                </div>
+            </div>
+            <!--Divider-->
+            <div class="ui section divider" id="mobile_label"></div>
+            <!--Mobile phones details-->
+            <h1 class="ui header">
+                <i class="mobile alternate icon"></i>
+                Mobile Phones
+            </h1>
+            <br>
+            <div class="ui two column grid">
+                <div class="five wide column">
+                    <div class="ui fluid product_detail blurring dimmable black card" style="height: 100%" onmouseover="mobile_card_animation(this)" onmouseleave="onRemove()">
+                        <div class="ui dimmer">
+                            <div class="content">
+                                <div class="center">
+                                    <strong>Find details</strong>
+                                    <br><br>
+                                    <div class="ui secondary button" id="iphone_button" onclick="twoCardListener(this)">Purchase</div>
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="image">
+                            <div class="ui blue ribbon label" style="width: 30%">New</div>
+                            <img src="../media/MainPage/Detail_cards/1.png">
+                        </div>
+                        <div class="content">
+                            <div class="header" style="font-size: 20px">
+                                Apple 12
+                            </div>
+                            <div class="meta" style="font-size: 13px">
+                                It's a deep year
+                            </div>
+                            <div class="description">
+                                <div class="ui bulleted list">
+                                    <div class="item">
+                                        <div class="content">
+                                            <strong style="font-size: 15px">5G goes iPhone 12</strong>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <strong style="font-size: 15px">A14 Chip</strong>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <strong style="font-size: 15px">IOS 14 System</strong>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <strong style="font-size: 15px">AI Camera system</strong>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <strong style="font-size: 15px">15W Faster Charging</strong>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <strong style="font-size: 15px">Dolby HDR Video</strong>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <strong style="font-size: 15px">New FaceID</strong>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <strong style="font-size: 15px">Beidou Navigation System</strong>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="eleven wide column" id="mobilesDetailImages">
+                    <div class="ui special four cards" id="mobile_first_row">
+                    </div>
+                    <div class="ui four cards" id="mobile_second_row">
+                    </div>
+                </div>
+            </div>
+
+            <!--Divider-->
+            <div class="ui section divider" id="laptop_label"></div>
+            <!--Laptops details-->
+            <h1 class="ui header">
+                <i class="laptop icon"></i>
+                Laptops
+            </h1>
+            <p></p>
+            <div class="ui two column grid">
+                <div class="five wide column">
+                    <div class="ui fluid product_detail blurring dimmable black card" style="height: 100%" onmouseover="mobile_card_animation(this)" onmouseleave="onRemove()">
+                        <div class="ui dimmer">
+                            <div class="content">
+                                <div class="center">
+                                    <strong>Find details</strong>
+                                    <br><br>
+                                    <div class="ui secondary button" id="legion_button" onclick="twoCardListener(this)">Purchase</div>
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="image">
+                            <div class="ui blue ribbon label" style="width: 30%">New</div>
+                            <img src="../media/MainPage/Detail_cards/2.png">
+                        </div>
+                        <div class="content">
+                            <div class="header" style="font-size: 20px">
+                                Legion Y740
+                            </div>
+                            <div class="meta" style="font-size: 13px">
+                                A powerful game monster
+                            </div>
+                            <div class="description">
+                                <div class="ui bulleted list">
+                                    <div class="item">
+                                        <div class="content">
+                                            <strong style="font-size: 15px">i7-9750h Chip</strong>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <strong style="font-size: 15px">RTX 2080 max-q</strong>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <strong style="font-size: 15px">16GB Double Channel</strong>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <strong style="font-size: 15px">1TB SSD</strong>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <strong style="font-size: 15px">15 Inch Screen</strong>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <strong style="font-size: 15px">HDR</strong>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <strong style="font-size: 15px">12 Hours Endurance</strong>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <div class="content">
+                                            <strong style="font-size: 15px">2.2GHz CPU</strong>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="eleven wide column" id="laptopDetailImages">
+                    <div class="ui four cards" id="laptop_first_row">
+                    </div>
+                    <div class="ui four cards" id="laptop_second_row">
+                    </div>
+                </div>
+            </div>
+
+            <!--Divider-->
+            <div class="ui section divider" id="tablet_label"></div>
+            <!--Tablets details-->
+            <h1 class="ui header">
+                <i class="tablet alternate icon"></i>
+                Tablets
+            </h1>
+            <p></p>
+            <div class="ui grid">
+                <div class="column">
+                    <div class="ui six cards" id="tabletDetailImages">
+                    </div>
+                </div>
+            </div>
+
+            <!--Divider-->
+            <div class="ui section divider" id="earphone_label"></div>
+            <!--Earphones details-->
+            <h1 class="ui header">
+                <i class="headphones icon"></i>
+                Earphones
+            </h1>
+            <p></p>
+            <div class="ui grid">
+                <div class="column">
+                    <div class="ui six cards" id="earphoneDetailImages">
+                    </div>
+                </div>
+            </div>
+
+            <!--Divider-->
+            <div class="ui section divider" id="others_label"></div>
+            <!--Others details-->
+            <h1 class="ui header">
+                <i class="plug icon"></i>
+                Others
+            </h1>
+            <p></p>
+            <div class="ui grid">
+                <div class="column">
+                    <div class="ui six cards" id="othersDetailImages">
+                    </div>
+                </div>
+            </div>
+            <p></p>
+
+        </div>
+        <div class="column">
+            <div class="ui vertical icon menu" style="position: fixed; top: 50%; right: 5px">
+                <a class="item" onclick="window.location.href='ModifyUserInfo.html'">
+                    <i class="user icon"></i>
+                    <strong>User</strong>
+                </a>
+                <a class="item" href="#" onclick="window.location.href='ShopCart.html'">
+                    <i class="shopping cart icon"></i>
+                    <strong>Cart</strong>
+                </a>
+                <a class="item" href="#" onclick="window.location.href='OrderList.html'">
+                    <i class="file alternate icon"></i>
+                    <strong>Order</strong>
+                </a>
+                <a class="item" href="#" onclick="window.location.href='Administrator.html'">
+                    <i class="user secret icon"></i>
+                    <strong>Admin</strong>
+                </a>
+                <a class="item" href="#">
+                    <i class="arrow up icon"></i>
+                    <strong>Top</strong>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <p>&nbsp</p>
+    <p>&nbsp</p>
+    <p>&nbsp</p>
+
+    <div class="footer">
+        <div class="ui center aligned container">
+            <div class="ui horizontal small divided link list">
+                <a class="item"><img src="../media/logos.ico" class="ui centered mini image"></a>
+                <a class="item" href="#" onclick="window.location.href='homepage.html'">
+                    <strong style="color: black">About Us</strong>
+                </a>
+                <a class="item" href="#">
+                    <strong style="color: black" onclick="window.location.href='UseragreementsUnique.html'">Privacy Policy</strong>
+                </a>
+                <div class="item" style="color: black">
+                    &nbsp©&nbsp Copyright 2020 DS Group 4
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="ui modal" id="category_menu_modal">
+    <div class="header"></div>
+    <div class="content">
+        <div class="ui four cards">
+            <div class='black card' onmouseover='modal_card_animation(this)' onmouseleave='onRemove()'>
+                <div class="image">
+                    <img src="">
+                </div>
+            </div>
+            <div class='black card' onmouseover='modal_card_animation(this)' onmouseleave='onRemove()'>
+                <div class="image">
+                    <img src="">
+                </div>
+            </div>
+            <div class='black card' onmouseover='modal_card_animation(this)' onmouseleave='onRemove()'>
+                <div class="image">
+                    <img src="">
+                </div>
+            </div>
+            <div class='black card' onmouseover='modal_card_animation(this)' onmouseleave='onRemove()'>
+                <div class="image">
+                    <img src="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="actions">
+        <div class="ui positive right labeled icon button" onclick="guidePosition()">
+            Learn More
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
+
+<div class="ui mini modal" id="no_such_product">
+    <div class="header">
+        <i class="x icon"></i>
+        <strong>Message</strong>
+    </div>
+    <div class="content">
+        <div class="content">
+            <p>No such product.</p>
+            <p>Please check your input.</p>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui negative right labeled icon red button">
+            OK
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
+</body>
+
+
+<script>
+
+    let allMainPageData;
+    let headerSearchContents = [];
+    /*
+    Initialize the page
+     */
+    window.onload = function ()
+    {
+        layui.use('carousel', function()
+        {
+            var carousel = layui.carousel;
+            carousel.render({
+                elem: '#header_carousel'
+                ,width: '100%'
+                ,height: '500px'
+                ,arrow: 'always'
+            });
+        });
+
+        /*
+        Initialize card images
+         */
+
+        let userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+        console.log(userInfo);
+
+        /*
+        Load User Icon
+         */
+        let url = urlJson.url_major + urlJson.PictureDownload + "?email=" + userInfo.email;
+
+
+        let jsonIcon = {
+            "email": userInfo.email
+        };
+        jsonIcon = JSON.stringify(jsonIcon);
+        $.ajax({
+            type: "POST",
+            url: urlJson.url_major + urlJson.CheckUserIcon,
+            data: jsonIcon,
+            dateType: 'JSON',
+            async : false,
+            cache : false,
+            success: function (res,status,xhr)
+            {
+                let response = JSON.parse(res);
+                console.log(response)
+                if(xhr.status == 200)
+                {
+                    if(response.status == "00")
+                    {
+
+                        let icon = urlJson.url_major + urlJson.PictureDownload + "?email=" + userInfo.email;
+                        console.log(icon);
+                        let iconPath = {
+                            "hasIcon": "1",
+                            "IconPath": icon
+                        };
+                        sessionStorage.setItem('IconPath', JSON.stringify(iconPath));
+                    }
+                    else
+                    {
+                        let iconPath = {
+                            "hasIcon": "0",
+                            "IconPath": ""
+                        };
+                        sessionStorage.setItem('IconPath', JSON.stringify(iconPath));
+                    }
+                }
+            }
+        });
+
+        if(JSON.parse(sessionStorage.getItem('IconPath')).hasIcon == '1')
+            $('#user_header_menu_icon').attr('src', urlJson.url_major + urlJson.PictureDownload + "?email=" + userInfo.email);
+        else if(JSON.parse(sessionStorage.getItem('IconPath')).hasIcon == '0')
+            $('#user_header_menu_icon').attr('src', userInfo.userIconPath);
+        $('#user_menu_name').html(userInfo.userName);
+
+        initializeMainPage();
+        createSearchData();
+        $('.ui.search').search
+        (
+            {
+                type: 'category',
+                source: headerSearchContents,
+                showNoResults: true,
+            }
+        );
+    };
+
+    function initializeMainPage()
+    {
+        let productsData = loadingMainPage();
+        allMainPageData = productsData;
+        sessionStorage.setItem('allProductsDataForAdmin', JSON.stringify(productsData));
+        //console.log(allMainPageData);
+        let allProData = allMainPageData.all;
+        let path = "../media/MainPage/Detail_cards/";
+        for(let i = 0; i < 4; i++)
+        {
+            let good_sn_one = allMainPageData.mobile[i + 1].goods_sn;
+            let good_sn_two = allMainPageData.mobile[i + 5].goods_sn;
+            let imagePathOne = path + good_sn_one + ".png";
+            let imagePathTwo = path + good_sn_two + ".png";
+            let headerOne = allMainPageData.mobile[i + 1].goods_name;
+            let headerTwo = allMainPageData.mobile[i + 5].goods_name;
+            let desOne_1 = allMainPageData.mobile[i + 1].description.description1;
+            let desOne_2 = allMainPageData.mobile[i + 1].description.description2;
+            let desOne_3 = allMainPageData.mobile[i + 1].description.description3;
+            let desTwo_1 = allMainPageData.mobile[i + 5].description.description1;
+            let desTwo_2 = allMainPageData.mobile[i + 5].description.description2;
+            let desTwo_3 = allMainPageData.mobile[i + 5].description.description3;
+            $('#mobile_first_row').append("<div class='black product_detail blurring dimmable card' onmouseover='mobile_card_animation(this)' onmouseleave='onRemove()'>" +
+                "<div class='image'><img src='" + imagePathOne + "'></div>" +
+                "<div class='ui dimmer'><div class='content'>" +
+                "<div class='content'><strong>Find details</strong><br><br>" +
+                "<div class='ui secondary button' onclick='dimmerButtonListener(this)' id='" + good_sn_one+ "'>Purchase</div>" +
+                "</div></div></div>" +
+                "<div class='content'>" +
+                "<div class='center aligned header'>" + headerOne + "</div>" +
+                "<div class='description'>" +
+                "<div class='ui bulleted list'>" +
+                "<div class='item'><div class='content'><strong>" + desOne_1 + "</strong></div></div>" +
+                "<div class='item'><div class='content'><strong>" + desOne_2 + "</strong></div></div>" +
+                "<div class='item'><div class='content'><strong>" + desOne_3 + "</strong></div></div>" +
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "</div>");
+            $('#mobile_second_row').append("<div class='black product_detail blurring dimmable card' onmouseover='mobile_card_animation(this)' onmouseleave='onRemove()'>" +
+                "<div class='image'><img src='" + imagePathTwo + "'></div>" +
+                "<div class='ui dimmer'><div class='content'>" +
+                "<div class='content'><strong>Find details</strong><br><br>" +
+                "<div class='ui secondary button' onclick='dimmerButtonListener(this)' id='" + good_sn_two + "'>Purchase</div>" +
+                "</div></div></div>" +
+                "<div class='content'>" +
+                "<div class='center aligned header'>" + headerTwo + "</div>" +
+                "<div class='description'>" +
+                "<div class='ui bulleted list'>" +
+                "<div class='item'><div class='content'><strong>" + desTwo_1 + "</strong></div></div>" +
+                "<div class='item'><div class='content'><strong>" + desTwo_2 + "</strong></div></div>" +
+                "<div class='item'><div class='content'><strong>" + desTwo_3 + "</strong></div></div>" +
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "</div>");
+        }
+
+        //console.log(allMainPageData.laptop);
+
+        for(let i = 0; i < 4; i++)
+        {
+            let good_sn_one = allMainPageData.laptop[i + 1].goods_sn;
+            let good_sn_two = allMainPageData.laptop[i + 5].goods_sn;
+            let imagePathOne = path + good_sn_one + ".png";
+            let imagePathTwo = path + good_sn_two + ".png";
+            let headerOne = allMainPageData.laptop[i + 1].goods_name;
+            let headerTwo = allMainPageData.laptop[i + 5].goods_name;
+            let desOne_1 = allMainPageData.laptop[i + 1].description.description1;
+            let desOne_2 = allMainPageData.laptop[i + 1].description.description2;
+            let desOne_3 = allMainPageData.laptop[i + 1].description.description3;
+            let desTwo_1 = allMainPageData.laptop[i + 5].description.description1;
+            let desTwo_2 = allMainPageData.laptop[i + 5].description.description2;
+            let desTwo_3 = allMainPageData.laptop[i + 5].description.description3;
+            $('#laptop_first_row').append("<div class='black product_detail blurring dimmable card' onmouseover='mobile_card_animation(this)' onmouseleave='onRemove()'>" +
+                "<div class='image'><img src='" + imagePathOne + "'></div>" +
+                "<div class='ui dimmer'><div class='content'>" +
+                "<div class='content'><strong>Find details</strong><br><br>" +
+                "<div class='ui secondary button' onclick='dimmerButtonListener(this)' id='" + good_sn_one + "'>Purchase</div>" +
+                "</div></div></div>" +
+                "<div class='content'>" +
+                "<div class='center aligned header'>" + headerOne + "</div>" +
+                "<div class='description'>" +
+                "<div class='ui bulleted list'>" +
+                "<div class='item'><div class='content'><strong>" + desOne_1 + "</strong></div></div>" +
+                "<div class='item'><div class='content'><strong>" + desOne_2 + "</strong></div></div>" +
+                "<div class='item'><div class='content'><strong>" + desOne_3 + "</strong></div></div>" +
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "</div>");
+
+            $('#laptop_second_row').append("<div class='black product_detail blurring dimmable card' onmouseover='mobile_card_animation(this)' onmouseleave='onRemove()'>" +
+                "<div class='image'><img src='" + imagePathTwo + "'></div>" +
+                "<div class='ui dimmer'><div class='content'>" +
+                "<div class='content'><strong>Find details</strong><br><br>" +
+                "<div class='ui secondary button' onclick='dimmerButtonListener(this)' id='" + good_sn_two + "'>Purchase</div>" +
+                "</div></div></div>" +
+                "<div class='content'>" +
+                "<div class='center aligned header'>" + headerTwo + "</div>" +
+                "<div class='description'>" +
+                "<div class='ui bulleted list'>" +
+                "<div class='item'><div class='content'><strong>" + desTwo_1 + "</strong></div></div>" +
+                "<div class='item'><div class='content'><strong>" + desTwo_2 + "</strong></div></div>" +
+                "<div class='item'><div class='content'><strong>" + desTwo_3 + "</strong></div></div>" +
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "</div>");
+        }
+
+        for(let i = 0; i < 6; i++)
+        {
+            let tableSn = allMainPageData.tablet[i].goods_sn;
+            let earphoneSn = allMainPageData.earphone[i].goods_sn;
+            let othersSn = allMainPageData.others[i].goods_sn;
+            let tabletPath = path + tableSn + ".png";
+            let earphonePath = path + earphoneSn + ".png";
+            let othersPath = path + othersSn + ".png";
+            let tabletHeader = allMainPageData.tablet[i].goods_name;
+            let earphoneHeader = allMainPageData.earphone[i].goods_name;
+            let othersHeader = allMainPageData.others[i].goods_name;
+            let buttonId;
+            //Product description
+            let descriptionOne;
+            let descriptionTwo;
+            for(let j = 0; j < 3; j++)
+            {
+                let div;
+                let image;
+                let header;
+                if(j == 0)
+                {
+                    div = "#tabletDetailImages";
+                    image = tabletPath;
+                    header = tabletHeader;
+                    buttonId = tableSn;
+                    descriptionOne = allMainPageData.tablet[i].description.description1;
+                    descriptionTwo = allMainPageData.tablet[i].description.description2;
+                }
+                else if(j == 1)
+                {
+                    div = "#earphoneDetailImages";
+                    image = earphonePath;
+                    header = earphoneHeader;
+                    buttonId = earphoneSn;
+                    descriptionOne = allMainPageData.earphone[i].description.description1;
+                    descriptionTwo = allMainPageData.earphone[i].description.description2;
+                }
+                else if(j == 2)
+                {
+                    div = "#othersDetailImages";
+                    image = othersPath;
+                    header = othersHeader;
+                    buttonId = othersSn;
+                    descriptionOne = allMainPageData.others[i].description.description1;
+                    descriptionTwo = allMainPageData.others[i].description.description2;
+                }
+                $(div).append("<div class='black product_detail blurring dimmable card' onmouseover='mobile_card_animation(this)' onmouseleave='onRemove()'>" +
+                    "<div class='image'><img src='" + image + "'></div>" +
+                    "<div class='ui dimmer'><div class='content'>" +
+                    "<div class='content'><strong>Find details</strong><br><br>" +
+                    "<div class='ui secondary button' onclick='dimmerButtonListener(this)' id='" + buttonId + "'>Purchase</div>" +
+                    "</div></div></div>" +
+                    "<div class='content'>" +
+                    "<div class='center aligned header'>" + header + "</div>" +
+                    "<div class='description'>" +
+                    "<div class='ui bulleted list'>" +
+                    "<div class='item'><div class='content'><strong>" + descriptionOne + "</strong></div></div>" +
+                    "<div class='item'><div class='content'><strong>" + descriptionTwo + "</strong></div></div>" +
+                    "</div>" +
+                    "</div>" +
+                    "</div>" +
+                    "</div>");
+            }
+        }
+
+        $('.product_detail').dimmer({
+            on: 'hover'
+        });
+    }
+
+    /*
+    Data for search box
+    */
+    function createSearchData()
+    {
+        let length = allMainPageData.all.length;
+        let all = allMainPageData.all;
+        let searchData = [];
+
+        console.log(all);
+        for(let i = 0; i < length; i++)
+        {
+            let oneRecord = all[i];
+            let brand = oneRecord.brand_id;
+            if(brand == 1)
+                brand = "Apple";
+            else if(brand == 2)
+                brand = "Huawei";
+            else if(brand == 3)
+                brand = "XiaoMi";
+            else if(brand == 4)
+                brand = "Samsung";
+            else
+                brand = "Lenovo";
+            let category = brand;
+            let title = oneRecord.goods_name;
+            let goodsData = oneRecord;
+            let oneData = {
+                category: category,
+                title: title,
+                goodId: oneRecord.goods_id,
+                goodsData: goodsData
+            }
+            searchData.push(oneData);
+        }
+        headerSearchContents = searchData;
+    }
+
+    /*
+    Search target product and jump to product page
+    */
+    function headerSearch()
+    {
+        let targets = $('input[name="header_search"]').val();
+        targets = $.trim(targets);
+        let oneProduct;
+        let isFind = false;
+        for(let i = 0; i < headerSearchContents.length; i++)
+        {
+            if(targets == headerSearchContents[i].title)
+            {
+                isFind = true;
+                oneProduct = headerSearchContents[i].goodsData;
+                break;
+            }
+        }
+        if(isFind)
+        {
+            sessionStorage.setItem('target_products', JSON.stringify(oneProduct));
+            window.location.href='ProductDetail.html';
+        }
+        else
+            $('#no_such_product').modal('show');
+    }
+
+    /*
+    Use this to jump to the product detail page
+    */
+    function dimmerButtonListener(button)
+    {
+        let goodSn = $(button).attr('id');
+        let allGoodsData = allMainPageData.all;
+        for(let i = 0; i < allGoodsData.length; i++)
+        {
+            if(allGoodsData[i].goods_sn == goodSn)
+            {
+                sessionStorage.setItem('target_products', JSON.stringify(allGoodsData[i]));
+                window.location.href='ProductDetail.html';
+                break;
+            }
+        }
+    }
+
+    /*
+    Initialize the product menu
+    */
+    function categoryMenuListener(val)
+    {
+        let menuId = val.id;
+        let contents = $('#category_menu_modal').children();
+        let cards = $('#category_menu_modal').children().children().children().children().children('img');
+        console.log(menuId);
+        $(contents[0]).empty();
+        $(contents[0]).append("<i class='star icon'></i> Popular Products");
+        console.log(cards);
+
+        let path = '../media/MainPage/Detail_cards/';
+        let category;
+        if(menuId == "laptop_header_menu")
+        {
+            $(cards[0]).attr('id', 'laptop_modal');
+            category = allMainPageData.laptop;
+
+        }
+        else if(menuId == "mobile_header_menu")
+        {
+            $(cards[0]).attr('id', 'mobile_modal');
+            category = allMainPageData.mobile;
+        }
+        else if(menuId == "tablet_header_menu")
+        {
+            $(cards[0]).attr('id', 'tablet_modal');
+            category = allMainPageData.tablet;
+        }
+        else if(menuId == "earphone_header_menu")
+        {
+            $(cards[0]).attr('id', 'earphone_modal');
+            category = allMainPageData.earphone;
+        }
+        else if(menuId == "others_header_menu")
+        {
+            $(cards[0]).attr('id', 'other_modal');
+            category = allMainPageData.others;
+        }
+
+        for(let i = 0; i < 4; i++)
+            cards[i].src = path + category[i].goods_sn + ".png";
+        $('#category_menu_modal').modal('show');
+    }
+
+    /*
+    Go to corresponding position
+    */
+    function guidePosition()
+    {
+        let modalId = $('#category_menu_modal').children().children().attr('id');
+        let position = "laptop_label";
+        if(modalId == "laptop_modal")
+            position = "laptop_label";
+        else if(modalId == "mobile_modal")
+            position = "mobile_label";
+        else if(modalId == "tablet_modal")
+            position = "tablet_label";
+        else if(modalId == "earphone_modal")
+            position = "earphone_label";
+        else if(modalId == "other_modal")
+            position = "others_label";
+        let scroll_offset = $("#" + position).offset();
+        $("body,html").animate({
+            scrollTop: scroll_offset.top
+        },0);
+    }
+
+    $('.headers_top').dimmer({
+        on: 'hover'
+    });
+
+    /*
+    Header card animation
+     */
+    let onHover = false;
+    function card_animation(val)
+    {
+        if(!onHover)
+        {
+            onHover = true;
+            let animationType = "bounce";
+            $(val).transition({
+                animation : animationType,
+                duration  : 500,
+                interval  : 500
+            });
+        }
+    }
+
+    /*
+    Mouse remove
+     */
+    function onRemove(val)
+    {
+        onHover = false;
+    }
+
+    /*
+    Card animation listener
+     */
+    function mobile_card_animation(val)
+    {
+        if(!onHover)
+        {
+            onHover = true;
+            let animationType = "pulse";
+            $(val).transition({
+                animation : animationType,
+                duration  : 500,
+                interval  : 500
+            });
+        }
+    }
+
+    /*
+    Modal card animation listener
+     */
+    function modal_card_animation(val)
+    {
+        if(!onHover)
+        {
+            onHover = true;
+            let animationType = "jiggle";
+            $(val).transition({
+                animation : animationType,
+                duration  : 500,
+                interval  : 500
+            });
+        }
+    }
+
+    function twoCardListener(button)
+    {
+        let id = $(button).attr('id');
+        let goods_sn;
+        if(id == "iphone_button")
+            goods_sn = "020101";
+        else if(id == "legion_button")
+            goods_sn = "010501";
+        let allGoodsData = allMainPageData.all;
+        for(let i = 0; i < allGoodsData.length; i++)
+        {
+            if(allGoodsData[i].goods_sn == goods_sn)
+            {
+                sessionStorage.setItem('target_products', JSON.stringify(allGoodsData[i]));
+                window.location.href='ProductDetail.html';
+                break;
+            }
+        }
+    }
+</script>
+
+<style>
+    body {
+        background-image: url("../media/MainPage/background.png");
+        background-repeat:no-repeat;
+        background-attachment: fixed;
+        background-origin: border-box;
+        background-size:cover;
+    }
+    .footer {
+        height: 50px;
+        line-height: 50px;
+
+        text-align: center;
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 999;
+    }
+</style>
+
+</html>

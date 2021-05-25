@@ -1,0 +1,552 @@
+<!--
+@Author: Tian Yu 17722024
+@Time: 2020.10.11
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>Login</title>
+    <link rel="shortcut icon" href="../media/logos.ico" />
+    <script src="../assets/plugins/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../js/MD5.js"></script>
+    <script type="text/javascript" src="../assets/plugins/semantic/semantic.js"></script>
+    <link rel="stylesheet" type="text/css" href="../assets/plugins/semantic/semantic.css">
+    <!-- Add dependency of UI-->
+    <script src="../assets/plugins/semantic/components/form.js"></script>
+    <script src="../assets/plugins/semantic/components/transition.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+    <script type="text/javascript" src="../js/AllUrlsJson.js"></script>
+    <script type="text/javascript" src="../js/AesFunction.js"></script>
+</head>
+<body>
+<!--Background video-->
+<video autoplay loop muted>
+    <source src="../media/login_page.mp4" type="video/mp4"  />
+    Your browser does not support the video tag.
+</video>
+
+<div class="ui middle aligned center aligned grid">
+    <div class="column">
+        <h2 class="ui teal image header">
+            <img src="../media/shop3.png" class="image">
+            <div class="content" style="color: #FFFFFF; font-size: 20px">
+                G4 E-Products Shopping Platform
+            </div>
+            <div class="content" style="color: #FFFFFF; align-items: center;font-size: 30px">
+                Login Now
+            </div>
+        </h2>
+
+        <form class="ui large form" name="login_forms" onsubmit="return false">
+            <div class="ui stacked segment">
+                <!--Email-->
+                <div class="field">
+                    <label style=" text-align: left">
+                        Email
+                    </label>
+                    <div class="ui left icon input" data-tooltip="Enter your Email address to login" data-position="top center" data-inverted="">
+                        <i class="envelope icon"></i>
+                        <input type="text" name="email" placeholder="E-mail address">
+                    </div>
+
+                </div>
+                <!--Password-->
+                <div class="field">
+                    <label style=" text-align: left">
+                        Password
+                    </label>
+                    <div class="ui left icon input" data-tooltip="Enter your password" data-position="top center" data-inverted="">
+                        <i class="lock icon"></i>
+                        <input type="password" name="password" placeholder="Password">
+                    </div>
+                </div>
+                <!--Picture verify code-->
+                <div class="field">
+                    <label style=" text-align: left">
+                        Verification code
+                    </label>
+                    <div class="fields">
+                        <div class="ten wide field">
+                            <div class="ui left icon input" data-tooltip="Enter the content of the picture" data-position="top center" data-inverted="">
+                                <i class="check circle icon"></i>
+                                <input type="text" name="verification_input" placeholder="Verification code" class="ver_code">
+                            </div>
+                        </div>
+                        <div class="seven wide field" data-tooltip="Click to change one" data-position="top center" data-inverted="">
+                            <canvas id="canvas" height="36%" width="150%" onclick="changeContents()"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <!--Submit button-->
+                <button class="ui fluid large primary button" type="submit" onclick="login()">
+                    <i class="sign-in icon"></i>
+                    Login Now
+                </button>
+            </div>
+            <!--Form check, if wrong, display error message-->
+            <div class="ui error message"></div>
+        </form>
+        <div class="ui message" style="text-align: center">
+            <i class="address card outline icon"></i>
+            New to us?&nbsp&nbsp&nbsp&nbsp&nbsp
+            <a href="#" onclick="window.location.href='Register.html'">
+                Sign Up A New Account
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="ui mini modal" id="wrong_password">
+    <div class="header">
+        <i class="x icon"></i>
+        <strong>Message</strong>
+    </div>
+    <div class="content">
+        <div class="content">
+            <p>Incorrect password</p>
+            <p>Please enter again.</p>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui negative right labeled icon red button">
+            OK
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
+<div class="ui mini modal" id="invalid_account">
+    <div class="header">
+        <i class="exclamation icon"></i>
+        <strong>Message</strong>
+    </div>
+    <div class="content">
+        <p>No such account!</p>
+        <p>Please sign up first.</p>
+    </div>
+    <div class="actions">
+        <div class="ui negative right labeled icon yellow button">
+            OK
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
+<div class="ui mini modal" id="successful_login">
+    <div class="header">
+        <i class="bell outline icon"></i>
+        <strong>Message</strong>
+    </div>
+    <div class="content">
+        <p>Login Successfully.</p>
+    </div>
+    <div class="actions">
+        <div class="ui positive right labeled icon button" onclick="window.location.href='MainPage.html'">
+            OK
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
+<div class="ui mini modal" id="require_error">
+    <div class="header">
+        <i class="x icon"></i>
+        <strong>Message</strong>
+    </div>
+    <div class="content">
+        <div class="content">
+            <p>Some error with the server</p>
+            <p>Please try it again.</p>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui negative right labeled icon red button">
+            OK
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
+<div class="ui mini modal" id="account_lock">
+    <div class="header">
+        <i class="x icon"></i>
+        <strong>Message</strong>
+    </div>
+    <div class="content">
+        <div class="content">
+            <p>Your account is locked by administrator for some reasons.</p>
+            <p>Please contact administrator to unlock.</p>
+        </div>
+    </div>
+    <div class="actions">
+        <div class="ui negative right labeled icon red button">
+            OK
+            <i class="checkmark icon"></i>
+        </div>
+    </div>
+</div>
+
+<div id="weather-v2-plugin-simple"></div>
+<script>
+    WIDGET = {
+        CONFIG: {
+            "modules": "01234",
+            "background": 3,
+            "tmpColor": "FFFFFF",
+            "tmpSize": 16,
+            "cityColor": "FFFFFF",
+            "citySize": 16,
+            "aqiSize": 16,
+            "weatherIconSize": 24,
+            "alertIconSize": 18,
+            "padding": "10px 10px 10px 10px",
+            "shadow": "1",
+            "language": "en",
+            "borderRadius": "10",
+            "fixed": "true",
+            "vertical": "top",
+            "horizontal": "center",
+            "right": "15",
+            "top": 10,
+            "key": "02WW4RjpnW"
+        }
+    }
+</script>
+<script src="https://apip.weatherdt.com/simple/static/js/weather-simple-common.js?v=2.0"></script>
+</body>
+
+<script>
+
+    /*
+    Load file content
+    */
+    let allServerInfo;
+    window.onload = function ()
+    {
+        allServerInfo = urlJson;
+    }
+
+    /*
+    Login form validation
+    */
+    function login()
+    {
+        /*
+        Form validation
+         */
+        $('.ui.form').form
+        (
+            {
+                fields: {
+                    email: {
+                        identifier: 'email',
+                        rules: [
+                            {
+                                type: 'empty',
+                                prompt : 'Please enter your e-mail'
+                            },
+                            {
+                                type: 'email',
+                                prompt: 'Please enter a valid e-mail'
+                            }
+                        ]
+                    },
+                    password: {
+                        identifier: 'password',
+                        rules: [
+                            {
+                                type: 'empty',
+                                prompt: 'Please enter your password'
+                            },
+                            {
+                                type: 'length[6]',
+                                prompt: 'Your password must be at least 6 characters'
+                            }
+                        ]
+                    },
+                    verification_input: {
+                        identifier: 'verification_input',
+                        rules: [
+                            {
+                                type: 'empty',
+                                prompt: 'Verification code can not be empty'
+                            },
+                            {
+                                type: 'verification_picture',
+                                prompt: 'Wrong verification code, please enter again'
+                            }
+                        ]
+                    }
+                },
+                /*
+                If the validation is successful, then query the web service
+                 */
+                onSuccess: function ()
+                {
+                    let email = $('.ui.form').form('get value', 'email');
+                    let password = hex_md5($('.ui.form').form('get value', 'password'));
+                    queryService(email, password);
+                }
+            }
+        );
+        /*
+        Determine whether the verification code is valid.
+        If not, change picture and clear the input box
+         */
+        let isVerifyValid = $('.ui.form').form('is valid', 'verification_input');
+        if(!isVerifyValid)
+        {
+            draw(show_num);
+            $(".ver_code").val('');
+        }
+    }
+    /*
+    Build a link to query background API logic
+     */
+    function queryService(userEmail, password)
+    {
+        let md5Password = password;
+
+        console.log(password.toString() + " Hello World!");
+
+        userEmail = encryptOneString(userEmail, aseKey, iv);
+        password = encryptOneString(password, aseKey, iv);
+
+        let jsonObject = {
+            "email": userEmail,
+            "password": password
+        };
+
+        jsonObject = JSON.stringify(jsonObject);
+        let userInfo;
+        let url_major = allServerInfo.url_major + allServerInfo.login;
+        $.ajax
+        ({
+            type: "POST",
+            url: url_major,
+            data: jsonObject,
+            dateType: 'JSON',
+            async : true,
+            cache : false,
+            success: function (res,status,xhr)
+            {
+                if(xhr.status == '200')
+                {
+                    let response = jQuery.parseJSON(res);
+
+                    console.log(response);
+                    if(response.status == '00')
+                    {
+                        let body = response.body;
+                        const aseKey = "1234123412ABCDEF";
+                        const iv = "ABCDEF1234123412";
+                        userInfo = {
+                            "address": decryptOneString(body.address, aseKey, iv),
+                            "admin": decryptOneString(body.admin, aseKey, iv),
+                            "email": body.email,
+                            "password": md5Password,
+                            "money": decryptOneString(body.money, aseKey, iv),
+                            "phone": decryptOneString(body.phone, aseKey, iv),
+                            "sex": decryptOneString(body.sex, aseKey, iv),
+                            "userIconPath": body.userIconPath,
+                            "userName": decryptOneString(body.userName, aseKey, iv),
+                            "isLock": decryptOneString(body.isLock, aseKey, iv),
+                        };
+                        console.log(userInfo);
+                        let gender = userInfo.sex;
+                        if(gender == "Male")
+                            userInfo.userIconPath = "../media/UserIcon/Default/default_male.png";
+                        else
+                            userInfo.userIconPath = "../media/UserIcon/Default/default_female.png";
+                        sessionStorage.setItem('userInfo', JSON.stringify(userInfo));
+
+                        $('#successful_login')
+                            .modal('setting', 'closable', false)
+                            .modal('show');
+                    }
+                    else if(response.status == '02')
+                    {
+                        $('#invalid_account')
+                            .modal('show');
+                    }
+                    else if(response.status == '03')
+                    {
+                        $('#wrong_password')
+                            .modal('show');
+                    }
+                    else if(response.status == '10')
+                    {
+                        $('#account_lock')
+                            .modal('show');
+                    }
+                }
+            },
+            fail: function(res)
+            {
+                $('#require_error')
+                    .modal('show');
+            },
+            error: function(res)
+            {
+                $('#require_error')
+                    .modal('show');
+            }
+        });
+    }
+
+    /*
+    Logic of generating verification code
+     */
+    //Content of the verification code
+    var show_num = [];
+    //Render the verification code on the canvas
+    draw(show_num);
+    //Change the picture of verification code
+    function changeContents()
+    {
+        draw(show_num);
+    }
+
+    /*
+    Generate the verification code the render it on the canvas
+    */
+    function draw(show_num)
+    {
+        let canvas_width=$('#canvas').width();
+        let canvas_height=$('#canvas').height();
+        let canvas = document.getElementById("canvas");
+        //Get canvas drawing environment
+        let context = canvas.getContext("2d");
+        canvas.width = canvas_width;
+        canvas.height = canvas_height;
+        //All the contents can appear in the picture
+        let allVerify = "a,b,c,d,e,f,g,h,i,j,k,m,n,p,q,r,s,t,u,v,w,x,y,z,A,B,C,E,F,G,H,J,K,L,M,N,P,Q,R,S,T,W,X,Y,Z,1,2,3,4,5,6,7,8,9,0";
+        let verifyArray = allVerify.split(",");
+        //Generating 6 digits verification code
+        for (let i = 0; i < 6; i++)
+        {
+            let index = Math.floor(Math.random() * verifyArray.length);
+            //The radian of each digit, 10°~60°
+            let radian = Math.random() * ((30 - 10 + 1) + 10) * Math.PI / 180;
+            //Get the contents randomly
+            let contents = verifyArray[index];
+            //Value of RGB
+            let color_red = Math.floor(Math.random() * 256);
+            let color_green = Math.floor(Math.random() * 256);
+            let color_blue = Math.floor(Math.random() * 256);
+            show_num[i] = contents.toLowerCase();
+            //x-position
+            let x = 20 + i * 20;
+            //y-position
+            let y = 20 + Math.random() * 8;
+            context.font = "bold 23px Times New Roman";
+            context.translate(x, y);
+            context.rotate(radian);
+            context.fillStyle = "rgb(" + color_red + "," + color_green + "," + color_blue + ")";
+            context.fillText(contents, 0, 0);
+            context.rotate(-radian);
+            context.translate(-x, -y);
+        }
+
+        /*
+        Lines on the code, total 9
+        */
+        for (let i = 0; i < 9; i++)
+        {
+            let color_red = Math.floor(Math.random() * 256);
+            let color_green = Math.floor(Math.random() * 256);
+            let color_blue = Math.floor(Math.random() * 256);
+            context.strokeStyle = "rgb(" + color_red + "," + color_green + "," + color_blue + ")";
+            context.beginPath();
+            context.moveTo(Math.random() * canvas_width, Math.random() * canvas_height);
+            context.lineTo(Math.random() * canvas_width, Math.random() * canvas_height);
+            context.stroke();
+        }
+        /*
+        Small points on the code, total 50
+         */
+        for (let i = 0; i < 50; i++)
+        {
+            let color_red = Math.floor(Math.random() * 256);
+            let color_green = Math.floor(Math.random() * 256);
+            let color_blue = Math.floor(Math.random() * 256);
+            context.strokeStyle = "rgb(" + color_red + "," + color_green + "," + color_blue + ")";
+            context.beginPath();
+            var x = Math.random() * canvas_width;
+            var y = Math.random() * canvas_height;
+            context.moveTo(x, y);
+            context.lineTo(x + 1, y + 1);
+            context.stroke();
+        }
+    }
+
+    /*
+    Form validation for verification code
+     */
+    $.fn.form.settings.rules.verification_picture = function ()
+    {
+        let verifyCode = $('.ui.form').form('get value', 'verification_input');
+        if(verifyCode != '')
+            verifyCode = verifyCode.toLowerCase();
+        let chars = show_num.join("");
+        if(verifyCode == chars)
+            return true;
+        else
+            return false;
+    }
+
+</script>
+
+
+<style type="text/css">
+    body {
+        background-color: #DADADA;
+    }
+    body > .grid {
+        height: 100%;
+    }
+    .image {
+        margin-top: -100px;
+    }
+    .column {
+        max-width: 450px;
+    }
+</style>
+
+<style>
+    *{
+        margin: 0px;
+        padding: 0px;
+    }
+    video
+    {
+        position: fixed;
+        right: 0px;
+        bottom: 0px;
+        min-width: 100%;
+        min-height: 100%;
+        height: auto;
+        width: auto;
+        z-index:-11
+    }
+    source
+    {
+        min-width: 100%;
+        min-height: 100%;
+        height: auto;
+        width: auto;
+    }
+    #canvas
+    {
+        vertical-align: middle;
+        box-sizing: border-box;
+        align-self: end;
+        border: 1px solid #ddd;
+        cursor: pointer;
+    }
+</style>
+
+</html>

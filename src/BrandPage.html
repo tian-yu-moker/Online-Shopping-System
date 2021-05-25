@@ -1,0 +1,269 @@
+<!--
+@Author: Tian Yu 17722024
+@Time: 2020.10.15
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title id="page_title">BrandPage</title>
+    <link rel="shortcut icon" href="../media/logos.ico" />
+    <link rel="stylesheet" href="../assets/plugins/layui-v2.5.6/layui/layui.css" media="all">
+    <script src="../assets/plugins/layui-v2.5.6/layui/layui.js"></script>
+    <script type="text/javascript" src="../assets/plugins/jquery-3.3.1.js"></script>
+    <script type="text/javascript" src="../assets/plugins/semantic/semantic.js"></script>
+    <link rel="stylesheet" type="text/css" href="../assets/plugins/semantic/semantic.css">
+    <script type="text/javascript" src="../js/JumpBrandPage.js"></script>
+    <script type="text/javascript" src="../js/AllUrlsJson.js"></script>
+</head>
+<body>
+<div class="ui fluid container">
+    <div class="ui top inverted menu">
+        <div class="ui item">
+            <img src="../media/logos.ico">
+        </div>
+        <a class="item" href="MainPage.html">
+            <i class="globe icon"></i>
+            Main Page
+        </a>
+        <a class="item" href="ShopCart.html">
+            <i class="cart icon"></i>
+            Shopping Cart
+        </a>
+        <a class="item" href="OrderList.html">
+            <i class="file alternate icon"></i>
+            Order List
+        </a>
+        <a class="item" href="Administrator.html">
+            <i class="user secret icon"></i>
+            Administrator
+        </a>
+        <div class="right menu">
+            <div class="item">
+                <img class="ui avatar image" id="user_header_menu_icon" src="">
+                <a class="text" id="user_menu_name" href="ModifyUserInfo.html">Username</a>
+            </div>
+            <a class="item" href="Login.html">
+                <i class="logout icon"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+</div>
+<div class="ui inverted vertical center aligned segment">
+    <div class="ui text container">
+        <p></p>
+        <h1 class="ui huge inverted header">
+            <strong id="firm_header" style="font-size: 60px"></strong>
+        </h1>
+        <p></p>
+        <h2>
+            <strong id="firm_slogan_header">
+            </strong>
+        </h2>
+        <br>
+        <div class="ui huge primary button">
+            Get Started
+            <i class="right arrow icon"></i>
+        </div>
+        <br><br><br><br>
+    </div>
+
+</div>
+<br><br>
+<div class="ui fluid container">
+    <div class="ui center aligned container"></div>
+    <div class="ui equal width grid">
+        <div class="column"></div>
+        <div class="twelve wide center aligned column">
+            <div class="ui large statistic">
+                <div class="value" id="start_statistic">
+                </div>
+                <div class="label" style="font-size: 20px">
+                </div>
+            </div>
+            <br><br><br><br><br>
+            <div class="ui equal width grid">
+                <div class="center aligned column">
+                    <img class="ui fluid rounded image" id="product_one" src="" style="height: 350px">
+                    <br><br>
+                    <strong style="font-size: 30px" id="product_one_name"></strong>
+                    <br><br>
+                    <button class="big ui primary button" id="product_one_button" onclick="twoProductListener(this)" onmouseover='buttonAnimation(this)' onmouseleave='mouseLeave()'>
+                        Learn More
+                    </button>
+                </div>
+                <div class="one wide column"></div>
+                <div class="center aligned column">
+                    <img class="ui fluid rounded image" id="product_two" src="" style="height: 350px">
+                    <br><br>
+                    <strong style="font-size: 30px" id="product_two_name"></strong>
+                    <br><br>
+                    <button class="big ui primary button" id="product_two_button" onclick="twoProductListener(this)" onmouseover='buttonAnimation(this)' onmouseleave='mouseLeave()'>
+                        Learn More
+                    </button>
+                </div>
+            </div>
+            <br><br>
+            <div class="ui section divider" id="mobile_label"></div>
+            <div class="ui medium statistic" id="others_statistic">
+                <div class="value">
+                    <i class="star icon"></i>
+                    Other Popular Products
+                </div>
+            </div>
+            <br><br>
+            <div class="ui center aligned cards" id="other_products">
+
+            </div>
+        </div>
+        <div class="column"></div>
+    </div>
+</div>
+<br><br><br><br><br>
+<div class="footer">
+    <div class="ui center aligned container">
+        <div class="ui horizontal small divided link list">
+            <a class="item"><img src="../media/logos.ico" class="ui centered mini image"></a>
+            <a class="item" href="#" onclick="window.location.href='homepage.html'">
+                <strong style="color: black">About Us</strong>
+            </a>
+            <a class="item" href="#" onclick="window.location.href='UseragreementsUnique.html'">
+                <strong style="color: black">Privacy Policy</strong>
+            </a>
+            <div class="item" style="color: black">
+                &nbsp©&nbsp Copyright 2020 DS Group 4
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+    /*
+    Initialize page
+     */
+    let loadingData;
+    let userInfo;
+    window.onload = function ()
+    {
+        loadingData = loadPage();
+        userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+
+        if(JSON.parse(sessionStorage.getItem('IconPath')).hasIcon == '1')
+            $('#user_header_menu_icon').attr('src', urlJson.url_major + urlJson.PictureDownload + "?email=" + userInfo.email);
+        else if(JSON.parse(sessionStorage.getItem('IconPath')).hasIcon == '0')
+            $('#user_header_menu_icon').attr('src', userInfo.userIconPath);
+
+        $('#user_menu_name').html(userInfo.userName);
+        let brand = sessionStorage.getItem('brandPageId');
+        if(brand == "5")
+            $('#others_statistic').empty();
+        console.log(loadingData);
+        $('#firm_header').html(loadingData.headerFirm);
+        $('#firm_slogan_header').html(headerSlogan);
+        $('#start_statistic').html(startStatistic);
+        $('#product_one_name').html(productOneName);
+        $('#product_two_name').html(productTwoName);
+        $('#product_one').attr('src', loadingData.productOneImage);
+        $('#product_two').attr('src', loadingData.productTwoImage);
+        let number = loadingData.productNumber;
+
+        for(let i = 0; i < number; i++)
+        {
+            if(loadingData.brandData[i].goods_sn == loadingData.snOne || loadingData.brandData[i].goods_sn == loadingData.snTwo)
+                continue;
+            let imageSrc = "../media/BrandImages/" + loadingData.brandData[i].goods_sn + ".png";
+            let othersId = loadingData.brandData[i].goods_sn;
+            let productName = loadingData.brandData[i].goods_name;
+            console.log(imageSrc);
+            $('#other_products').append("<div class='ui centered blurring dimmable black card'>" +
+                "<div class='others_products ui dimmer'><div class='content'><div class='center'>" +
+                "<div class='ui secondary button' id='" + othersId + "' onclick='jumpProductDetailsPage(this)'>Find More</div>" +
+                "</div></div>" +
+                "</div>" +
+                "<img src='" + imageSrc + "'>" +
+                "<div class='centered header'><strong style='font-size: 20px'>" + productName + "</strong></div>" +
+                "</div>");
+        }
+
+        $('.others_products').dimmer({
+            on: 'hover'
+        })
+    }
+
+    /*
+    Handle buttons animation when hovering on them
+     */
+    let isHover = false;
+    function buttonAnimation(button)
+    {
+        if(!isHover)
+        {
+            isHover = true;
+            let animationType = "pulse";
+            $(button).transition({
+                animation : animationType,
+                duration  : 600,
+                interval  : 500
+            });
+        }
+    }
+
+    function mouseLeave()
+    {
+        isHover = false;
+    }
+
+    function twoProductListener(button)
+    {
+        let buttonId = $(button).attr('id');
+        let products;
+        if(buttonId == "product_one_button")
+            products = loadingData.brandData[0];
+        else if(buttonId == "product_two_button")
+            products = loadingData.brandData[1];
+
+        sessionStorage.setItem('target_products', JSON.stringify(products));
+        console.log(sessionStorage.getItem('target_products'));
+        window.location.href='ProductDetail.html';
+    }
+
+    function jumpProductDetailsPage(button)
+    {
+        let buttonId = $(button).attr('id');
+        let products;
+        for(let i = 2; i < loadingData.brandData.length; i++)
+        {
+            //console.log(loadingData[i].goods_sn);
+            if(buttonId == loadingData.brandData[i].goods_sn)
+            {
+                products = loadingData.brandData[i];
+                break;
+            }
+        }
+        //console.log(loadingData);
+        sessionStorage.setItem('target_products', JSON.stringify(products));
+        console.log(sessionStorage.getItem('target_products'));
+        window.location.href='ProductDetail.html';
+    }
+</script>
+
+<style>
+    *{
+        margin: 0px;
+        padding: 0px;
+        border:0;
+    }
+
+    body
+    {
+        background-image: url("../media/MainPage/background.png");
+        background-repeat:no-repeat;
+        background-attachment: fixed;
+        background-origin: border-box;
+        background-size:cover;
+    }
+</style>
+
+</html>
