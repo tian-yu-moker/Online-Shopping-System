@@ -15,4 +15,4 @@ All interfaces are integrated in the file "API".
 ## About me
 @ Autor: Tian Yu  
 @ Date: 2020.11  
-@ Current a student at Beijing Jiaotong University, major in Computer Science.
+@ A student at Beijing Jiaotong University, major in Computer Science.
